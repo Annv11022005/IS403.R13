@@ -1,0 +1,20 @@
+# Môi trường ảo Python & cache
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Dữ liệu nháp (nếu có)
+data/raw/
+data/ggtrend_search.csv
+data/multiTimeline.csv
+

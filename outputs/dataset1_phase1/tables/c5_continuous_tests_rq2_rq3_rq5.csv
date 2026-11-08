@@ -1,0 +1,6 @@
+﻿Câu_hỏi_NC,Biến,Mô_tả,Pearson_r,P_Value_Pearson,Spearman_rho,P_Value_Spearman,Chiều_tác_động,Kết_luận
+RQ2,area_m2,Diện tích căn hộ (m²),0.7664,< 0.0001,0.8027,< 0.0001,Thuận chiều (+),Có tương quan thuận chiều (+) ý nghĩa thống kê
+RQ3,bedrooms,Số phòng ngủ,0.6585,< 0.0001,0.65,< 0.0001,Thuận chiều (+),Có tương quan thuận chiều (+) ý nghĩa thống kê
+RQ3,bathrooms,Số phòng vệ sinh (WC),0.5968,< 0.0001,0.6146,< 0.0001,Thuận chiều (+),Có tương quan thuận chiều (+) ý nghĩa thống kê
+RQ4,furniture_score,Điểm chất lượng nội thất (0–3),0.1053,< 0.0001,0.0881,< 0.0001,Thuận chiều (+),Có tương quan thuận chiều (+) ý nghĩa thống kê
+RQ5,distance_to_center_km,Khoảng cách tới Trung tâm Q1 (km),-0.083,< 0.0001,-0.0676,0.0001,Ngược chiều (-),Có tương quan ngược chiều (-) ý nghĩa thống kê

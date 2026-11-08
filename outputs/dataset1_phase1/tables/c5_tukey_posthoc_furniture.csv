@@ -1,0 +1,7 @@
+﻿Nhóm_A,Nhóm_B,Mean_A,Mean_B,Chênh_lệch_(A-B),CI_95_Low,CI_95_High,P_Value,Khác_biệt_ý_nghĩa_(p<0.05)
+Bàn giao thô,Hoàn thiện cơ bản,10.55,10.99,-0.43,-3.84,2.98,0.9880,Không
+Bàn giao thô,Nội thất đầy đủ,10.55,9.27,1.28,-2.01,4.57,0.7484,Không
+Bàn giao thô,Nội thất cao cấp,10.55,11.58,-1.03,-4.34,2.28,0.8546,Không
+Hoàn thiện cơ bản,Nội thất đầy đủ,10.99,9.27,1.71,0.7,2.73,< 0.0001,Có
+Hoàn thiện cơ bản,Nội thất cao cấp,10.99,11.58,-0.6,-1.68,0.49,0.4900,Không
+Nội thất đầy đủ,Nội thất cao cấp,9.27,11.58,-2.31,-2.9,-1.73,< 0.0001,Có

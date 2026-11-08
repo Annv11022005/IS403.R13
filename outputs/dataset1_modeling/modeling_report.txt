@@ -1,0 +1,78 @@
+==========================================================================================
+BÁO CÁO KẾT QUẢ GIAI ĐOẠN 2, 3 & 4 (DATASET 1): HỒI QUY OLS & MACHINE LEARNING
+==========================================================================================
+Quy mô chia dữ liệu (Stratified 80/20): Train = 2,555 căn | Test = 639 căn
+Tổng số đặc trưng sau Pipeline        : 26 biến (One-Hot + Out-of-Fold Target Encoding)
+Trạng thái thư viện XGBoost           : Đã kích hoạt XGBRegressor chuẩn
+
+------------------------------------------------------------------------------------------
+1. [MỤC C.6] HỒI QUY ĐA BIẾN OLS CƠ BẢN (R² = 0.6926, Adj R² = 0.6919, F = 1025.57)
+------------------------------------------------------------------------------------------
+                  Biến                         Mô_tả  Coefficient  Std_Error  t_Stat  P_Value  VIF                              Kết_luận
+Intercept (Hệ số chặn) Giá cơ sở khi các biến bằng 0      -0.1175     0.2940  -0.399   0.6896  NaN                         Không ý nghĩa
+               area_m2                Diện tích (m²)       0.1395     0.0051  27.541 < 0.0001 4.75             Có ý nghĩa (Tăng giá (+))
+              bedrooms                  Số phòng ngủ       0.6458     0.1928   3.349   0.0008 5.33             Có ý nghĩa (Tăng giá (+))
+             bathrooms         Số phòng vệ sinh (WC)       0.0099     0.2126   0.047   0.9628 3.72 Không có ý nghĩa thống kê (p >= 0.05)
+       furniture_score           Điểm nội thất (0–3)       1.2913     0.0987  13.082 < 0.0001 1.01             Có ý nghĩa (Tăng giá (+))
+ distance_to_center_km       Khoảng cách tới Q1 (km)      -0.3542     0.0154 -23.022 < 0.0001 1.18             Có ý nghĩa (Giảm giá (-))
+              has_pool         Tiện ích Hồ bơi (0/1)       1.9849     0.2455   8.085 < 0.0001 4.46             Có ý nghĩa (Tăng giá (+))
+               has_gym      Tiện ích Phòng Gym (0/1)       1.3622     0.2390   5.699 < 0.0001 4.11             Có ý nghĩa (Tăng giá (+))
+
+------------------------------------------------------------------------------------------
+2. [MỤC C.6 MỞ RỘNG] HỒI QUY OLS KIỂM SOÁT KHU VỰC & PHÂN KHÚC (R² = 0.7346, Adj R² = 0.7337)
+------------------------------------------------------------------------------------------
+                  Biến                                 Mô_tả  Coefficient  Std_Error  t_Stat  P_Value  VIF                              Kết_luận
+Intercept (Hệ số chặn)         Giá cơ sở khi các biến bằng 0       0.6301     0.4250   1.483   0.1383  NaN                         Không ý nghĩa
+               area_m2                        Diện tích (m²)       0.1413     0.0048  29.230 < 0.0001 5.01             Có ý nghĩa (Tăng giá (+))
+              bedrooms                          Số phòng ngủ       0.4579     0.1808   2.532   0.0114 5.42             Có ý nghĩa (Tăng giá (+))
+             bathrooms                 Số phòng vệ sinh (WC)      -0.2387     0.2000  -1.194   0.2327 3.80 Không có ý nghĩa thống kê (p >= 0.05)
+       furniture_score                   Điểm nội thất (0–3)       1.2482     0.0928  13.453 < 0.0001 1.03             Có ý nghĩa (Tăng giá (+))
+ distance_to_center_km               Khoảng cách tới Q1 (km)      -0.4177     0.0266 -15.728 < 0.0001 4.06             Có ý nghĩa (Giảm giá (-))
+              has_pool                 Tiện ích Hồ bơi (0/1)       1.1818     0.2354   5.021 < 0.0001 4.74             Có ý nghĩa (Tăng giá (+))
+               has_gym              Tiện ích Phòng Gym (0/1)       1.8267     0.2242   8.149 < 0.0001 4.18             Có ý nghĩa (Tăng giá (+))
+ is_commercial_project             Chung cư thương mại (0/1)       1.3037     0.1593   8.182 < 0.0001 2.37             Có ý nghĩa (Tăng giá (+))
+             is_quan_2     Khu vực: Quận 2 (so với Q9/TĐ cũ)       1.1535     0.2454   4.701 < 0.0001 3.89             Có ý nghĩa (Tăng giá (+))
+         is_binh_thanh Khu vực: Bình Thạnh (so với Q9/TĐ cũ)      -0.0431     0.2812  -0.153   0.8782 6.47 Không có ý nghĩa thống kê (p >= 0.05)
+             is_quan_7     Khu vực: Quận 7 (so với Q9/TĐ cũ)      -1.9756     0.2608  -7.575 < 0.0001 5.02             Có ý nghĩa (Giảm giá (-))
+
+------------------------------------------------------------------------------------------
+3. [MỤC D.11 & RQ10] BẢNG SO SÁNH HIỆU NĂNG CÁC MÔ HÌNH MACHINE LEARNING TRÊN TẬP TEST
+------------------------------------------------------------------------------------------
+          Mô_hình      Nhánh_Pipeline  CV_5Fold_R2  Train_R2  Test_MAE  Test_RMSE  Test_MAPE  Test_R2
+          XGBoost   preprocessor_tree       0.8699    0.9364    1.2351     1.9232     0.1206   0.8835
+    Random Forest   preprocessor_tree       0.8668    0.9420    1.2937     1.9324     0.1288   0.8824
+    Decision Tree   preprocessor_tree       0.8309    0.8949    1.4497     2.1879     0.1418   0.8492
+ Ridge Regression preprocessor_linear       0.8185    0.8235    1.4762     2.2238     0.1562   0.8442
+Linear Regression preprocessor_linear       0.8185    0.8237    1.4777     2.2258     0.1565   0.8439
+
+------------------------------------------------------------------------------------------
+4. [TRẢ LỜI RQ7] TOP 10 YẾU TỐ QUAN TRỌNG NHẤT TRONG DỰ BÁO GIÁ THUÊ CĂN HỘ
+------------------------------------------------------------------------------------------
+                       Biến                                    Mô_tả  Importance_RF  Importance_XGB  Importance_Tree  Permutation_Importance
+                    area_m2                    Diện tích căn hộ (m²)         0.4535          0.1693           0.3114                  0.6071
+             te_project_pm2 Đặc trưng Dự án/Tòa nhà (Target Encoded)         0.2647          0.0640           0.1644                  0.3059
+                  bathrooms                    Số phòng vệ sinh (WC)         0.0566          0.2239           0.1402                  0.0050
+                   bedrooms                             Số phòng ngủ         0.0392          0.1524           0.0958                  0.0175
+                te_ward_pm2        Vị trí Phường/Xã (Target Encoded)         0.1005          0.0221           0.0613                  0.0226
+                   has_pool                          Tiện ích Hồ bơi         0.0098          0.0569           0.0334                  0.0073
+      distance_to_center_km                  Khoảng cách đến Q1 (km)         0.0385          0.0160           0.0273                  0.0166
+      is_commercial_project            Phân khúc Chung cư thương mại         0.0021          0.0509           0.0265                  0.0008
+                    has_gym                       Tiện ích Phòng Gym         0.0097          0.0306           0.0201                  0.0059
+apartment_type_Nhà ở xã hội                  Loại hình: Nhà ở xã hội         0.0001          0.0347           0.0174                  0.0000
+
+------------------------------------------------------------------------------------------
+5. KẾT LUẬN CHÍNH CHO BÁO CÁO (MỤC D.11, E.1, E.3 - DATASET 1):
+------------------------------------------------------------------------------------------
+  - Mô hình dự báo tốt nhất trên Dataset 1 là `XGBoost` với kết quả trên tập Test:
+      + MAE  = 1.2351 triệu VNĐ/tháng
+      + RMSE = 1.9232 triệu VNĐ/tháng
+      + MAPE = 0.1206 (thang thập phân 0-1)
+      + R²   = 0.8835 (thang thập phân 0-1)
+  - Các mô hình Ensemble dựa trên cây (Random Forest, XGBoost) vượt trội hơn mô hình tuyến tính
+    nhờ nắm bắt được tương tác phi tuyến giữa Vị trí (Dự án/Phường) x Quy mô diện tích x Phân khúc.
+
+DANH SÁCH FILE KẾT QUẢ ĐÃ XUẤT:
+  - Thư mục bảng CSV : outputs\dataset1_modeling\tables (5 bảng chuẩn)
+  - Thư mục biểu đồ  : outputs\dataset1_modeling\figures (4 biểu đồ 300 DPI: Hình 06 -> 09)
+  - File báo cáo     : outputs\dataset1_modeling\modeling_report.txt
+==========================================================================================

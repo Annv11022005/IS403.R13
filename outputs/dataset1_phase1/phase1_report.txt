@@ -1,0 +1,113 @@
+======================================================================================
+BÁO CÁO KẾT QUẢ GIAI ĐOẠN 1 (DATASET 1): EDA & KIỂM ĐỊNH THỐNG KÊ (RQ1 -> RQ6)
+======================================================================================
+Nguồn dữ liệu : data\processed\hcm_apartment_rentals.csv
+Quy mô mẫu    : 3,194 căn hộ cho thuê hợp lệ
+
+--------------------------------------------------------------------------------------
+1. [MỤC C.1] THỐNG KÊ MÔ TẢ THEO 3 QUẬN CHÍNH
+--------------------------------------------------------------------------------------
+district_std  Count  Mean  Median  Std  Skewness  Kurtosis  Mean_Đơn_giá_m2  Tỷ_lệ_Chung_cư_TM
+     Thủ Đức   1320 10.35     8.0 6.22      1.27      1.13            0.182             0.6902
+      Quận 7    855 10.28     9.0 4.70      1.07      0.73            0.177             0.6737
+  Bình Thạnh   1019  9.29     7.5 5.52      2.28      5.56            0.200             0.2375
+ Toàn bộ mẫu   3194  9.99     8.0 5.64      1.56      2.40            0.186             0.5413
+
+--------------------------------------------------------------------------------------
+2. [MỤC C.1 MỞ RỘNG] THỐNG KÊ THEO 5 TIỂU KHU VỰC (TÁCH QUẬN 2, QUẬN 9, THỦ ĐỨC CŨ)
+--------------------------------------------------------------------------------------
+        sub_district  Count  Mean  Median  Std  Skewness  Kurtosis  Mean_Đơn_giá_m2  Tỷ_lệ_Chung_cư_TM
+    Quận 2 (Thủ Đức)    703 12.32    10.0 6.74      0.78     -0.07            0.212             0.6586
+              Quận 7    855 10.28     9.0 4.70      1.07      0.73            0.177             0.6737
+          Bình Thạnh   1019  9.29     7.5 5.52      2.28      5.56            0.200             0.2375
+    Quận 9 (Thủ Đức)    447  8.16     6.5 4.77      2.47      7.39            0.146             0.7696
+Thủ Đức cũ (Thủ Đức)    170  7.99     6.0 4.29      1.42      1.58            0.156             0.6118
+         Toàn bộ mẫu   3194  9.99     8.0 5.64      1.56      2.40            0.186             0.5413
+
+--------------------------------------------------------------------------------------
+3. [NGHỊCH LÝ SIMPSON] THỐNG KÊ CHÉO TIỂU KHU VỰC x PHÂN KHÚC CĂN HỘ
+--------------------------------------------------------------------------------------
+        Tiểu_khu_vực           Phân_khúc  Count  Tỷ_lệ_trong_khu_vực  Mean_Giá_thuê  Median_Giá_thuê  Std_Giá_thuê  Mean_Diện_tích_m2  Mean_Đơn_giá_m2
+    Quận 2 (Thủ Đức) Chung cư thương mại    463               0.6586          15.25            16.00          6.50               66.9            0.228
+    Quận 2 (Thủ Đức)  CHDV / Mini / Khác    240               0.3414           6.66             6.40          1.78               37.2            0.182
+              Quận 7 Chung cư thương mại    576               0.6737          12.26            11.50          4.49               71.2            0.182
+              Quận 7  CHDV / Mini / Khác    279               0.3263           6.20             6.00          1.15               37.8            0.167
+          Bình Thạnh Chung cư thương mại    242               0.2375          16.18            17.00          7.39               67.7            0.237
+          Bình Thạnh  CHDV / Mini / Khác    777               0.7625           7.14             6.80          1.90               38.8            0.188
+    Quận 9 (Thủ Đức) Chung cư thương mại    344               0.7696           9.09             7.50          5.04               62.6            0.142
+    Quận 9 (Thủ Đức)  CHDV / Mini / Khác    103               0.2304           5.02             4.80          1.06               33.0            0.158
+Thủ Đức cũ (Thủ Đức) Chung cư thương mại    104               0.6118           9.88             8.25          4.49               64.2            0.155
+Thủ Đức cũ (Thủ Đức)  CHDV / Mini / Khác     66               0.3882           5.00             5.00          1.05               33.0            0.156
+
+--------------------------------------------------------------------------------------
+4. [MỤC C.5 - LỚP 1] KIỂM TRA GIẢ ĐỊNH PHÂN PHỐI & ĐỒNG NHẤT PHƯƠNG SAI (LEVENE)
+--------------------------------------------------------------------------------------
+                  Loại_kiểm_tra                       Đối_tượng  Thống_kê  P_Value                                                              Đánh_giá
+Phân phối chuẩn (D'Agostino K²)     price_million_vnd (Giá gốc)    885.73 < 0.0001        Lệch phải (Skew=1.56) -> Cần kèm Kruskal-Wallis / Mann-Whitney
+Phân phối chuẩn (D'Agostino K²) ln(price_million_vnd) (Log giá)    188.60 < 0.0001                                        Cân đối hơn rõ rệt (Skew=0.55)
+  Đồng nhất phương sai (Levene)              3 Quận chính (RQ1)     29.48 < 0.0001 Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+  Đồng nhất phương sai (Levene)   5 Tiểu khu vực (RQ1 chi tiết)     44.84 < 0.0001 Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+  Đồng nhất phương sai (Levene)            4 Cấp nội thất (RQ4)     24.24 < 0.0001 Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+  Đồng nhất phương sai (Levene)           Hồ bơi Có/Không (RQ6)    505.37 < 0.0001 Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+  Đồng nhất phương sai (Levene)        Phòng Gym Có/Không (RQ6)    422.91 < 0.0001 Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+
+--------------------------------------------------------------------------------------
+5. [MỤC C.5 - LỚP 2A] KIỂM ĐỊNH PHÂN NHÓM (ANOVA, WELCH, KRUSKAL-WALLIS & ETA²)
+--------------------------------------------------------------------------------------
+    Câu_hỏi_NC        Biến_phân_tích            Kiểm_định_tham_số              Kiểm_định_Welch           Kiểm_định_phi_tham_số            Độ_lớn_tác_động
+           RQ1          district_std ANOVA F = 11.76 (p < 0.0001) Welch F = 12.05 (p < 0.0001)  Kruskal H = 41.82 (p < 0.0001)    Rất nhỏ (Eta² = 0.0073)
+RQ1 (Chi tiết)          sub_district ANOVA F = 55.12 (p < 0.0001) Welch F = 49.54 (p < 0.0001) Kruskal H = 229.12 (p < 0.0001) Trung bình (Eta² = 0.0647)
+           RQ4             furniture ANOVA F = 36.96 (p < 0.0001) Welch F = 31.25 (p < 0.0001) Kruskal H = 112.72 (p < 0.0001)        Nhỏ (Eta² = 0.0336)
+           RQ6              has_pool Welch t = 32.52 (p < 0.0001)             ΔMean = +6.60 tr         Mann-Whitney p < 0.0001        Lớn (Eta² = 0.3107)
+           RQ6               has_gym Welch t = 32.14 (p < 0.0001)             ΔMean = +6.62 tr         Mann-Whitney p < 0.0001        Lớn (Eta² = 0.3044)
+     Phân khúc is_commercial_project Welch t = 39.62 (p < 0.0001)             ΔMean = +6.20 tr         Mann-Whitney p < 0.0001        Lớn (Eta² = 0.2996)
+
+--------------------------------------------------------------------------------------
+6. [MỤC C.5 - LỚP 2B] KIỂM ĐỊNH TƯƠNG QUAN BIẾN LIÊN TỤC (RQ2, RQ3, RQ4, RQ5)
+--------------------------------------------------------------------------------------
+Câu_hỏi_NC                  Biến  Pearson_r P_Value_Pearson  Spearman_rho  Chiều_tác_động
+       RQ2               area_m2     0.7664        < 0.0001        0.8027 Thuận chiều (+)
+       RQ3              bedrooms     0.6585        < 0.0001        0.6500 Thuận chiều (+)
+       RQ3             bathrooms     0.5968        < 0.0001        0.6146 Thuận chiều (+)
+       RQ4       furniture_score     0.1053        < 0.0001        0.0881 Thuận chiều (+)
+       RQ5 distance_to_center_km    -0.0830        < 0.0001       -0.0676 Ngược chiều (-)
+
+--------------------------------------------------------------------------------------
+7. [MỤC C.5 - LỚP 3] HẬU ĐỊNH TUKEY HSD GIỮA 5 TIỂU KHU VỰC (CHỈ RÕ CẶP CHÊNH LỆCH)
+--------------------------------------------------------------------------------------
+          Nhóm_A               Nhóm_B  Mean_A  Mean_B  Chênh_lệch_(A-B)  CI_95_Low  CI_95_High  P_Value Khác_biệt_ý_nghĩa_(p<0.05)
+Quận 2 (Thủ Đức)               Quận 7   12.32   10.28              2.04       1.28        2.80 < 0.0001                         Có
+Quận 2 (Thủ Đức)           Bình Thạnh   12.32    9.29              3.03       2.30        3.76 < 0.0001                         Có
+Quận 2 (Thủ Đức)     Quận 9 (Thủ Đức)   12.32    8.16              4.16       3.26        5.07 < 0.0001                         Có
+Quận 2 (Thủ Đức) Thủ Đức cũ (Thủ Đức)   12.32    7.99              4.33       3.06        5.61 < 0.0001                         Có
+          Quận 7           Bình Thạnh   10.28    9.29              0.99       0.30        1.68   0.0009                         Có
+          Quận 7     Quận 9 (Thủ Đức)   10.28    8.16              2.12       1.25        2.99 < 0.0001                         Có
+          Quận 7 Thủ Đức cũ (Thủ Đức)   10.28    7.99              2.29       1.04        3.55 < 0.0001                         Có
+      Bình Thạnh     Quận 9 (Thủ Đức)    9.29    8.16              1.13       0.29        1.98   0.0024                         Có
+      Bình Thạnh Thủ Đức cũ (Thủ Đức)    9.29    7.99              1.30       0.07        2.54   0.0324                         Có
+Quận 9 (Thủ Đức) Thủ Đức cũ (Thủ Đức)    8.16    7.99              0.17      -1.17        1.51   0.9969                      Không
+
+--------------------------------------------------------------------------------------
+8. [BƯỚC 1.4] ĐÚC KẾT QUYẾT ĐỊNH KỸ THUẬT CHUYỂN GIAO SANG GIAI ĐOẠN 2 (ML PIPELINE)
+--------------------------------------------------------------------------------------
+  [1] Biến mục tiêu: Giá gốc lệch phải (Skewness = +1.56), khi lấy ln(giá) giảm còn +0.55.
+      -> Ở Giai đoạn 2 nên đối chứng thêm biến đổi log-target để tối ưu sai số tỷ lệ MAPE.
+  [2] Biến không gian & phân khúc: Tách `sub_district` (5 khu vực) làm tăng mạnh Eta² so với
+      chỉ gộp 3 quận chính; đồng thời `is_commercial_project` tách bạch hoàn toàn 2 mặt bằng giá.
+      -> Bắt buộc đưa `sub_district`, `apartment_type`, `is_commercial_project` (One-Hot) cùng
+         `ward` và `project_name` (Target Encoding chống Data Leakage) vào Pipeline.
+  [3] Cảnh báo Đa cộng tuyến (|r| >= 0.60 giữa các biến đầu vào):
+      - area_m2 <-> bedrooms (r = +0.866)
+      - area_m2 <-> bathrooms (r = +0.792)
+      - area_m2 <-> is_commercial_project (r = +0.622)
+      - bedrooms <-> bathrooms (r = +0.835)
+      - bathrooms <-> is_commercial_project (r = +0.605)
+      - has_pool <-> has_gym (r = +0.867)
+      - has_pool <-> is_commercial_project (r = +0.655)
+      -> Cần kiểm tra hệ số VIF ở mô hình OLS và dùng điều chuẩn Ridge ở nhánh tuyến tính.
+
+DANH SÁCH FILE KẾT QUẢ ĐÃ XUẤT:
+  - Thư mục bảng CSV : outputs\dataset1_phase1\tables (12 bảng chuẩn)
+  - Thư mục biểu đồ  : outputs\dataset1_phase1\figures (5 biểu đồ 300 DPI)
+  - File tóm tắt     : outputs\dataset1_phase1\phase1_report.txt
+======================================================================================

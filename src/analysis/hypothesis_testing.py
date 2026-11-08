@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Bước 1.3: Kiểm định giả thuyết thống kê 3 lớp cho Dataset 1 (Mục C.5 - RQ1 đến RQ6)
-  - Lớp 1: Kiểm tra giả định phân phối chuẩn (D'Agostino-Pearson) & đồng nhất phương sai (Levene)
-  - Lớp 2: Kiểm định chính (One-Way ANOVA / Welch t-test) + Đối chứng bền vững (Welch ANOVA,
-           Kruskal-Wallis, Mann-Whitney U) + Độ lớn tác động thực tế (Eta-squared η², Cohen's d)
-  - Lớp 3: Kiểm định hậu định cặp Tukey HSD (chỉ đích danh cặp khu vực / nội thất chênh lệch)
-"""
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -20,7 +12,6 @@ def _fmt_p(p: float) -> str:
 
 
 def _eta_squared(groups: list[np.ndarray]) -> float:
-    """Tính Eta-squared (η² = SS_between / SS_total) đo % phương sai giá giải thích bởi biến phân nhóm."""
     all_vals = np.concatenate(groups)
     grand_mean = float(np.mean(all_vals))
     ss_total = float(np.sum((all_vals - grand_mean) ** 2))
@@ -31,21 +22,17 @@ def _eta_squared(groups: list[np.ndarray]) -> float:
 
 
 def _interpret_eta2(eta2: float) -> str:
-    """Phân loại độ lớn tác động theo chuẩn Cohen (1988)."""
     if eta2 >= 0.14:
-        return f"Lớn ({eta2 * 100:.1f}%)"
+        return f"Lớn (Eta² = {eta2:.4f})"
     if eta2 >= 0.06:
-        return f"Trung bình ({eta2 * 100:.1f}%)"
+        return f"Trung bình (Eta² = {eta2:.4f})"
     if eta2 >= 0.01:
-        return f"Nhỏ ({eta2 * 100:.1f}%)"
-    return f"Rất nhỏ ({eta2 * 100:.2f}%)"
+        return f"Nhỏ (Eta² = {eta2:.4f})"
+    return f"Rất nhỏ (Eta² = {eta2:.4f})"
 
 
 def _welch_anova(groups: list[np.ndarray]) -> tuple[float, float]:
-    """
-    Tính chính xác kiểm định Welch's One-Way ANOVA (Welch, 1951)
-    cho trường hợp phương sai giữa các nhóm không đồng nhất (Levene p < 0.05).
-    """
+    # Kiểm định Welch's One-Way ANOVA
     valid = [g for g in groups if len(g) >= 2 and np.var(g, ddof=1) > 1e-12]
     k = len(valid)
     if k < 2:
@@ -70,10 +57,9 @@ def _welch_anova(groups: list[np.ndarray]) -> tuple[float, float]:
 
 
 def check_statistical_assumptions(df: pd.DataFrame) -> pd.DataFrame:
-    """Lớp 1: Kiểm tra phân phối chuẩn của biến mục tiêu và tính đồng nhất phương sai Levene."""
+    # Kiểm tra phân phối chuẩn và tính đồng nhất phương sai Levene
     rows = []
 
-    # 1. Kiểm tra phân phối chuẩn của giá gốc và ln(giá)
     prices = df["price_million_vnd"].dropna().values
     log_p = np.log(np.clip(prices, 0.1, None))
 
@@ -95,7 +81,6 @@ def check_statistical_assumptions(df: pd.DataFrame) -> pd.DataFrame:
         "Đánh_giá": f"Cân đối hơn rõ rệt (Skew={pd.Series(log_p).skew():.2f})",
     })
 
-    # 2. Kiểm định Levene (Brown-Forsythe center='median') về tính đồng nhất phương sai
     levene_targets = [
         ("district_std", "3 Quận chính (RQ1)"),
         ("sub_district", "5 Tiểu khu vực (RQ1 chi tiết)"),
@@ -128,10 +113,9 @@ def check_statistical_assumptions(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_group_hypothesis_tests(df: pd.DataFrame) -> pd.DataFrame:
-    """Lớp 2A: Kiểm định cho các biến phân nhóm (RQ1, RQ4, RQ6 và Phân khúc căn hộ)."""
+    # Kiểm định ANOVA, Welch, Kruskal-Wallis và t-test
     rows = []
 
-    # A. Biến >= 3 nhóm: One-Way ANOVA + Welch ANOVA + Kruskal-Wallis + Eta²
     multi_specs = [
         ("RQ1", "district_std", "Giá thuê giữa 3 quận chính (Bình Thạnh, Q7, Thủ Đức)", None),
         ("RQ1 (Chi tiết)", "sub_district", "Giá thuê giữa 5 tiểu khu vực (tách Q2, Q9, Thủ Đức cũ)", None),
@@ -163,7 +147,6 @@ def run_group_hypothesis_tests(df: pd.DataFrame) -> pd.DataFrame:
             "Kết_luận": "Bác bỏ H0 (Khác biệt có ý nghĩa thống kê)" if p_welch < 0.05 else "Không bác bỏ H0",
         })
 
-    # B. Biến nhị phân 2 nhóm: Welch t-test + Mann-Whitney U + Chênh lệch Mean + Eta²
     binary_specs = [
         ("RQ6", "has_pool", "Chênh lệch giá thuê khi có Hồ bơi"),
         ("RQ6", "has_gym", "Chênh lệch giá thuê khi có Phòng Gym"),
@@ -175,7 +158,7 @@ def run_group_hypothesis_tests(df: pd.DataFrame) -> pd.DataFrame:
         diff = float(np.mean(g1) - np.mean(g0))
 
         t_val, p_t = stats.ttest_ind(g1, g0, equal_var=False)
-        u_val, p_mw = stats.mannwhitneyu(g1, g0, alternative="two-sided")
+        _, p_mw = stats.mannwhitneyu(g1, g0, alternative="two-sided")
         eta2 = _eta_squared([g0, g1])
 
         rows.append({
@@ -194,7 +177,7 @@ def run_group_hypothesis_tests(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_continuous_correlation_tests(df: pd.DataFrame) -> pd.DataFrame:
-    """Lớp 2B: Kiểm định ý nghĩa thống kê hệ số tương quan cho RQ2, RQ3, RQ4, RQ5."""
+    # Kiểm định tương quan cho biến liên tục
     specs = [
         ("RQ2", "area_m2", "Diện tích căn hộ (m²)"),
         ("RQ3", "bedrooms", "Số phòng ngủ"),
@@ -229,7 +212,7 @@ def run_continuous_correlation_tests(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_tukey_posthoc(df: pd.DataFrame, group_col: str, custom_order: list[str] | None = None) -> pd.DataFrame:
-    """Lớp 3: Kiểm định hậu định cặp Tukey HSD giữa từng cặp nhóm."""
+    # Kiểm định hậu định cặp Tukey HSD
     if custom_order:
         names = [x for x in custom_order if x in set(df[group_col].dropna())]
     else:
@@ -277,7 +260,6 @@ def run_tukey_posthoc(df: pd.DataFrame, group_col: str, custom_order: list[str] 
 
 
 def run_hypothesis_pipeline(df: pd.DataFrame, table_dir: Path) -> dict[str, pd.DataFrame]:
-    """Thực thi toàn bộ Bước 1.3 và xuất các bảng CSV kết quả kiểm định."""
     assumptions_df = check_statistical_assumptions(df)
     group_tests_df = run_group_hypothesis_tests(df)
     cont_tests_df = run_continuous_correlation_tests(df)
@@ -301,3 +283,4 @@ def run_hypothesis_pipeline(df: pd.DataFrame, table_dir: Path) -> dict[str, pd.D
         "tukey_subdistrict": tukey_sub_df,
         "tukey_furniture": tukey_furn_df,
     }
+

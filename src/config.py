@@ -1,32 +1,31 @@
 # -*- coding: utf-8 -*-
-"""
-Cấu hình trung tâm cho dự án IS403:
-- Quản lý đường dẫn dữ liệu & thư mục xuất kết quả
-- Định nghĩa danh sách cột, nhãn tiếng Việt và bảng màu chuẩn cho báo cáo
-- Thiết lập Matplotlib hỗ trợ đầy đủ tiếng Việt Unicode trên Windows
-"""
-
 from pathlib import Path
+import shutil
 import sys
 
-# Gốc thư mục dự án (d:\Code\IS403)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# Đường dẫn dữ liệu
 DATA_DIR = PROJECT_ROOT / "data"
-RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 DATASET1_CSV = PROCESSED_DATA_DIR / "hcm_apartment_rentals.csv"
 DATASET2_CSV = PROCESSED_DATA_DIR / "hcm_rent_timeseries.csv"
 
-# Đường dẫn xuất kết quả Giai đoạn 1 (Dataset 1 - EDA & Kiểm định thống kê)
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 PHASE1_OUT_DIR = OUTPUTS_DIR / "dataset1_phase1"
 PHASE1_TABLES_DIR = PHASE1_OUT_DIR / "tables"
 PHASE1_FIGURES_DIR = PHASE1_OUT_DIR / "figures"
 PHASE1_REPORT_TXT = PHASE1_OUT_DIR / "phase1_report.txt"
 
-# Thứ tự hiển thị chuẩn cho biến phân loại có thứ bậc
+MODELING_OUT_DIR = OUTPUTS_DIR / "dataset1_modeling"
+MODELING_TABLES_DIR = MODELING_OUT_DIR / "tables"
+MODELING_FIGURES_DIR = MODELING_OUT_DIR / "figures"
+MODELING_REPORT_TXT = MODELING_OUT_DIR / "modeling_report.txt"
+
+TS_OUT_DIR = OUTPUTS_DIR / "dataset2_timeseries"
+TS_TABLES_DIR = TS_OUT_DIR / "tables"
+TS_FIGURES_DIR = TS_OUT_DIR / "figures"
+TS_REPORT_TXT = TS_OUT_DIR / "timeseries_report.txt"
+
 FURNITURE_ORDER = [
     "Bàn giao thô",
     "Hoàn thiện cơ bản",
@@ -34,7 +33,6 @@ FURNITURE_ORDER = [
     "Nội thất cao cấp",
 ]
 
-# Các biến định lượng trong Dataset 1 kèm mô tả tiếng Việt
 NUMERIC_FEATURES_META = [
     ("price_million_vnd", "Giá thuê (triệu VNĐ/tháng)"),
     ("price_per_m2", "Đơn giá thuê (triệu VNĐ/m²)"),
@@ -48,20 +46,51 @@ NUMERIC_FEATURES_META = [
     ("is_commercial_project", "Chung cư thương mại (0/1)"),
 ]
 
-# Bảng màu đồng bộ cho biểu đồ khoa học
 PALETTE_MAIN = ["#2563EB", "#0EA5E9", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"]
-COLOR_COMMERCIAL = "#2563EB"   # Xanh dương đậm cho Chung cư thương mại
-COLOR_CHDV = "#F59E0B"         # Cam vàng cho CHDV / Mini
+COLOR_COMMERCIAL = "#2563EB"
+COLOR_CHDV = "#F59E0B"
+
+
+def cleanup_temp_data() -> None:
+    # Tự động dọn dẹp các file/thư mục dữ liệu nháp và các thư mục cũ trong src/
+    src_dir = PROJECT_ROOT / "src"
+    obsolete_dirs = [
+        DATA_DIR / "raw",
+        src_dir / "data_collection",
+        src_dir / "preprocessing",
+        src_dir / "dataset1",
+        src_dir / "dataset2",
+    ]
+    for d in obsolete_dirs:
+        if d.exists():
+            shutil.rmtree(d, ignore_errors=True)
+
+    for tmp_name in ["ggtrend_search.csv", "multiTimeline.csv"]:
+        tmp_path = DATA_DIR / tmp_name
+        if tmp_path.exists():
+            tmp_path.unlink()
 
 
 def ensure_phase1_dirs() -> None:
-    """Tạo sẵn cây thư mục outputs cho Giai đoạn 1 nếu chưa tồn tại."""
+    cleanup_temp_data()
     PHASE1_TABLES_DIR.mkdir(parents=True, exist_ok=True)
     PHASE1_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def ensure_modeling_dirs() -> None:
+    cleanup_temp_data()
+    MODELING_TABLES_DIR.mkdir(parents=True, exist_ok=True)
+    MODELING_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def ensure_ts_dirs() -> None:
+    cleanup_temp_data()
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    TS_TABLES_DIR.mkdir(parents=True, exist_ok=True)
+    TS_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+
+
 def setup_matplotlib_style() -> None:
-    """Cấu hình backend Agg (chạy nền trên CMD) và font tiếng Việt chuẩn nét 300 DPI."""
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -85,3 +114,8 @@ def setup_matplotlib_style() -> None:
     plt.rcParams["axes.grid"] = True
     plt.rcParams["grid.alpha"] = 0.25
     plt.rcParams["grid.linestyle"] = "--"
+
+
+if __name__ == "__main__":
+    cleanup_temp_data()
+    print("Da don dep xong data/raw, ggtrend_search.csv, multiTimeline.csv va cac thu muc cu trong src/ (chi giu lai src/analysis va src/model).")

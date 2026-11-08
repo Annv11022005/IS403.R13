@@ -1,14 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Bước 1.2: Trực quan hóa khám phá dữ liệu (EDA) cho Dataset 1 (Mục C.2 - C.4)
-Xuất 5 biểu đồ độ phân giải 300 DPI phục vụ báo cáo IS403:
-  1. 01_target_distribution.png        : Phân bố giá gốc, log(giá) & cấu trúc 2 đỉnh theo phân khúc
-  2. 02_spatial_boxplots_rq1.png       : So sánh không gian 3 quận, 5 tiểu khu vực, đơn giá/m² & Nghịch lý Simpson
-  3. 03_furniture_amenities_rq4_rq6.png: Tác động của Nội thất, Hồ bơi và Phòng Gym
-  4. 04_area_distance_scatter_rq2_rq5.png: Diện tích & Khoảng cách (kèm đường phi tuyến theo cự ly)
-  5. 05_correlation_matrices_c4.png    : Đối chiếu ma trận tương quan Pearson (r) và Spearman (rho)
-"""
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -32,7 +22,6 @@ def _styled_boxplot(
     ylabel: str = "Giá thuê (triệu VNĐ/tháng)",
     rotate: int = 0,
 ) -> None:
-    """Vẽ Boxplot chuẩn báo cáo (tương thích mọi phiên bản Matplotlib)."""
     bp = ax.boxplot(
         groups,
         patch_artist=True,
@@ -63,13 +52,12 @@ def _styled_boxplot(
 
 
 def plot_target_distribution(df: pd.DataFrame, fig_dir: Path) -> None:
-    """Hình 1: Phân bố giá thuê gốc, biến đổi ln(giá) và tách 2 phân khúc căn hộ."""
+    # Hình 1: Phân bố giá thuê gốc, ln(giá) và theo phân khúc
     fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.8))
 
     prices = df["price_million_vnd"].dropna().values
     skew_raw = float(pd.Series(prices).skew())
 
-    # Panel A: Giá gốc
     ax0 = axes[0]
     ax0.hist(prices, bins=34, density=True, color="#3B82F6", alpha=0.55, edgecolor="white")
     xg0 = np.linspace(prices.min(), prices.max(), 300)
@@ -81,7 +69,6 @@ def plot_target_distribution(df: pd.DataFrame, fig_dir: Path) -> None:
     ax0.set_ylabel("Mật độ")
     ax0.legend(fontsize=8.5, frameon=True)
 
-    # Panel B: Biến đổi ln(giá)
     log_p = np.log(np.clip(prices, 0.1, None))
     skew_log = float(pd.Series(log_p).skew())
     ax1 = axes[1]
@@ -95,7 +82,6 @@ def plot_target_distribution(df: pd.DataFrame, fig_dir: Path) -> None:
     ax1.set_ylabel("Mật độ")
     ax1.legend(fontsize=8.5, frameon=True)
 
-    # Panel C: Tách 2 phân khúc Bimodal
     ax2 = axes[2]
     comm = df.loc[df["is_commercial_project"] == 1, "price_million_vnd"].dropna().values
     chdv = df.loc[df["is_commercial_project"] == 0, "price_million_vnd"].dropna().values
@@ -121,17 +107,15 @@ def plot_target_distribution(df: pd.DataFrame, fig_dir: Path) -> None:
 
 
 def plot_spatial_analysis(df: pd.DataFrame, fig_dir: Path) -> None:
-    """Hình 2: Phân tích không gian đa cấp độ (3 quận, 5 tiểu khu vực, đơn giá/m² & tách phân khúc)."""
+    # Hình 2: So sánh giá thuê theo khu vực & phân khúc (RQ1)
     fig, axes = plt.subplots(2, 2, figsize=(15, 10.2))
 
-    # (a) 3 quận chính
     dist_order = df.groupby("district_std")["price_million_vnd"].mean().sort_values(ascending=False).index.tolist()
     dist_groups = [df.loc[df["district_std"] == d, "price_million_vnd"].dropna().values for d in dist_order]
     dist_labels = [f"{d}\n(n={len(g)}, TB={g.mean():.1f})" for d, g in zip(dist_order, dist_groups)]
     _styled_boxplot(axes[0, 0], dist_groups, dist_labels, PALETTE_MAIN[:len(dist_order)],
                     "(a) Giá thuê theo 3 khu vực hành chính")
 
-    # (b) 5 tiểu khu vực
     sub_order = df.groupby("sub_district")["price_million_vnd"].mean().sort_values(ascending=False).index.tolist()
     sub_short = [s.replace(" (Thủ Đức)", "") for s in sub_order]
     sub_groups = [df.loc[df["sub_district"] == s, "price_million_vnd"].dropna().values for s in sub_order]
@@ -139,14 +123,12 @@ def plot_spatial_analysis(df: pd.DataFrame, fig_dir: Path) -> None:
     _styled_boxplot(axes[0, 1], sub_groups, sub_labels, PALETTE_MAIN[:len(sub_order)],
                     "(b) Giá thuê theo 5 Tiểu khu vực (tách Q2, Q9, Thủ Đức cũ)")
 
-    # (c) Đơn giá thuê mỗi m² theo 5 tiểu khu vực
     pm2_groups = [df.loc[df["sub_district"] == s, "price_per_m2"].dropna().values for s in sub_order]
     pm2_labels = [f"{sh}\n(TB={g.mean():.2f})" for sh, g in zip(sub_short, pm2_groups)]
     _styled_boxplot(axes[1, 0], pm2_groups, pm2_labels, PALETTE_MAIN[:len(sub_order)],
                     "(c) Đơn giá thuê trên mỗi m² theo 5 Tiểu khu vực",
                     ylabel="Đơn giá (triệu VNĐ/m²/tháng)")
 
-    # (d) So sánh Giá trung bình Chung cư TM vs CHDV/Mini tại từng Tiểu khu vực (minh họa Nghịch lý Simpson)
     ax3 = axes[1, 1]
     x = np.arange(len(sub_order))
     width = 0.36
@@ -180,7 +162,7 @@ def plot_spatial_analysis(df: pd.DataFrame, fig_dir: Path) -> None:
 
 
 def plot_furniture_and_amenities(df: pd.DataFrame, fig_dir: Path) -> None:
-    """Hình 3: Boxplot theo Tình trạng nội thất (RQ4) và Tiện ích Hồ bơi / Gym (RQ6)."""
+    # Hình 3: Boxplot theo Nội thất (RQ4) và Hồ bơi/Gym (RQ6)
     fig, axes = plt.subplots(1, 3, figsize=(16, 5.2))
 
     present_furn = [f for f in FURNITURE_ORDER if f in set(df["furniture"].dropna())]
@@ -218,12 +200,11 @@ def plot_furniture_and_amenities(df: pd.DataFrame, fig_dir: Path) -> None:
 
 
 def plot_area_and_distance_relations(df: pd.DataFrame, fig_dir: Path) -> None:
-    """Hình 4: Quan hệ Diện tích vs Giá thuê (RQ2) và Khoảng cách vs Giá thuê (RQ5 - kèm đường phi tuyến)."""
+    # Hình 4: Scatter plot Diện tích (RQ2) và Khoảng cách (RQ5)
     fig, axes = plt.subplots(1, 2, figsize=(14.5, 5.5))
 
     y = df["price_million_vnd"].values
 
-    # Panel A: Diện tích vs Giá thuê
     ax0 = axes[0]
     for flag, label, color in [
         (0, "CHDV / Mini / Khác", COLOR_CHDV),
@@ -242,7 +223,6 @@ def plot_area_and_distance_relations(df: pd.DataFrame, fig_dir: Path) -> None:
     ax0.set_ylabel("Giá thuê (triệu VNĐ/tháng)")
     ax0.legend(frameon=True, fontsize=8.8)
 
-    # Panel B: Khoảng cách đến Q1 vs Giá thuê (làm rõ hiệu ứng phi tuyến ở cụm đại đô thị Q9)
     ax1 = axes[1]
     sub_order = df.groupby("sub_district")["price_million_vnd"].mean().sort_values(ascending=False).index.tolist()
     for s_name, color in zip(sub_order, PALETTE_MAIN):
@@ -256,7 +236,6 @@ def plot_area_and_distance_relations(df: pd.DataFrame, fig_dir: Path) -> None:
     ax1.plot(xg2, ic2 + sl2 * xg2, color="#DC2626", ls="--", lw=2.0,
              label=f"Tuyến tính (r = {r2:.2f})")
 
-    # Đường bậc 2 minh họa sự uốn cong phi tuyến khi ra tới cụm dự án xa trung tâm (Q9)
     poly_coef = np.polyfit(x_dist, y, deg=2)
     ax1.plot(xg2, np.polyval(poly_coef, xg2), color="#111827", lw=2.2,
              label="Xu hướng phi tuyến bậc 2")
@@ -273,7 +252,7 @@ def plot_area_and_distance_relations(df: pd.DataFrame, fig_dir: Path) -> None:
 
 
 def plot_correlation_matrices(df: pd.DataFrame, fig_dir: Path, table_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Hình 5: Đối chiếu Ma trận tương quan Pearson (tuyến tính) và Spearman (thứ bậc)."""
+    # Hình 5: Ma trận tương quan Pearson và Spearman
     cols = [
         "price_million_vnd",
         "price_per_m2",
@@ -336,9 +315,9 @@ def plot_correlation_matrices(df: pd.DataFrame, fig_dir: Path, table_dir: Path) 
 
 
 def run_visualization_pipeline(df: pd.DataFrame, fig_dir: Path, table_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Thực thi trọn bộ 5 biểu đồ EDA của Bước 1.2."""
     plot_target_distribution(df, fig_dir)
     plot_spatial_analysis(df, fig_dir)
     plot_furniture_and_amenities(df, fig_dir)
     plot_area_and_distance_relations(df, fig_dir)
     return plot_correlation_matrices(df, fig_dir, table_dir)
+

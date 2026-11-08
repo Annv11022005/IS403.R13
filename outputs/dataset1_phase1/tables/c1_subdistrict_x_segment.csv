@@ -1,0 +1,11 @@
+﻿Tiểu_khu_vực,Phân_khúc,Count,Tỷ_lệ_trong_khu_vực,Mean_Giá_thuê,Median_Giá_thuê,Std_Giá_thuê,Mean_Diện_tích_m2,Mean_Đơn_giá_m2
+Quận 2 (Thủ Đức),Chung cư thương mại,463,0.6586,15.25,16.0,6.5,66.9,0.228
+Quận 2 (Thủ Đức),CHDV / Mini / Khác,240,0.3414,6.66,6.4,1.78,37.2,0.182
+Quận 7,Chung cư thương mại,576,0.6737,12.26,11.5,4.49,71.2,0.182
+Quận 7,CHDV / Mini / Khác,279,0.3263,6.2,6.0,1.15,37.8,0.167
+Bình Thạnh,Chung cư thương mại,242,0.2375,16.18,17.0,7.39,67.7,0.237
+Bình Thạnh,CHDV / Mini / Khác,777,0.7625,7.14,6.8,1.9,38.8,0.188
+Quận 9 (Thủ Đức),Chung cư thương mại,344,0.7696,9.09,7.5,5.04,62.6,0.142
+Quận 9 (Thủ Đức),CHDV / Mini / Khác,103,0.2304,5.02,4.8,1.06,33.0,0.158
+Thủ Đức cũ (Thủ Đức),Chung cư thương mại,104,0.6118,9.88,8.25,4.49,64.2,0.155
+Thủ Đức cũ (Thủ Đức),CHDV / Mini / Khác,66,0.3882,5.0,5.0,1.05,33.0,0.156

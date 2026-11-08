@@ -1,0 +1,6 @@
+﻿Biến_vĩ_mô,Mô_tả,Pearson_r_Level,P_Value_Level,Spearman_rho,Best_Lag_Months,Pearson_r_BestLag,Pearson_r_vs_DeltaRent,P_Value_vs_DeltaRent
+search_demand,Nhu cầu tìm kiếm Google Trends,0.1949,0.1009,0.1298,3,0.2384,0.5488,0.0
+cpi_yoy_pct,Lạm phát CPI YoY (%),0.4597,0.0,0.4281,0,0.4597,-0.1469,0.2217
+interest_rate_pct,Lãi suất 12 tháng (%/năm),-0.0225,0.851,-0.1491,0,-0.0225,-0.1801,0.1328
+policy_rate_pct,Lãi suất tái cấp vốn NHNN (%/năm),0.5044,0.0,0.5744,0,0.5044,-0.054,0.6548
+supply_units,Nguồn cung căn hộ (căn/tháng),-0.1601,0.1792,-0.2559,3,-0.2028,0.0166,0.8908

@@ -1,0 +1,11 @@
+﻿Biến,Mô_tả,Bậc_sai_phân,ADF_Statistic,P_Value,Lag_AIC,Critical_5%,Kết_luận
+rent_price_million_vnd,Giá thuê căn hộ TB (triệu/tháng),Chuỗi gốc I(0) (d=0),-1.302,0.6282,2,-2.904,Không dừng (Non-stationary)
+rent_price_million_vnd,Giá thuê căn hộ TB (triệu/tháng),Sai phân bậc 1 I(1) (d=1),-2.8384,0.0044,1,-1.946,Chuỗi dừng (Stationary)
+search_demand,Nhu cầu tìm kiếm Google Trends,Chuỗi gốc I(0) (d=0),-4.0329,0.0012,0,-2.903,Chuỗi dừng (Stationary)
+search_demand,Nhu cầu tìm kiếm Google Trends,Sai phân bậc 1 I(1) (d=1),-7.9587,0.0,1,-1.946,Chuỗi dừng (Stationary)
+cpi_yoy_pct,Chỉ số lạm phát CPI YoY (%),Chuỗi gốc I(0) (d=0),-3.6958,0.0042,1,-2.904,Chuỗi dừng (Stationary)
+cpi_yoy_pct,Chỉ số lạm phát CPI YoY (%),Sai phân bậc 1 I(1) (d=1),-5.8777,0.0,0,-1.945,Chuỗi dừng (Stationary)
+interest_rate_pct,Lãi suất kỳ hạn 12 tháng (%/năm),Chuỗi gốc I(0) (d=0),-2.2101,0.2026,3,-2.905,Không dừng (Non-stationary)
+interest_rate_pct,Lãi suất kỳ hạn 12 tháng (%/năm),Sai phân bậc 1 I(1) (d=1),-5.1138,0.0,0,-1.945,Chuỗi dừng (Stationary)
+supply_units,Nguồn cung căn hộ (căn/tháng),Chuỗi gốc I(0) (d=0),-2.0381,0.2701,4,-2.906,Không dừng (Non-stationary)
+supply_units,Nguồn cung căn hộ (căn/tháng),Sai phân bậc 1 I(1) (d=1),-10.4888,0.0,1,-1.946,Chuỗi dừng (Stationary)

@@ -1,0 +1,111 @@
+========================================================================================
+BÁO CÁO KẾT QUẢ PHÂN TÍCH & DỰ BÁO CHUỖI THỜI GIAN (DATASET 2: 2019-01 -> 2024-12)
+========================================================================================
+- Tổng số quan sát: 72 tháng (Train: 60 tháng 2019-2023 | Test: 12 tháng 2024)
+- Quy ước đơn vị đồng nhất: Sai số tuyệt đối (MAE, RMSE) tính bằng triệu VNĐ/tháng;
+  tất cả các chỉ số tỷ lệ (MAPE, R², Feature Importance, Eta², CV) tính trên thang thập phân [0, 1].
+
+1. THỐNG KÊ MÔ TẢ CHUỖI THỜI GIAN (ts1_descriptive_stats.csv)
+----------------------------------------------------------------------------------------
+                  Biến                                         Mô_tả  N_Tháng    Mean     SD  Median     IQR    Min     Max  Skewness     CV
+rent_price_million_vnd          Giá thuê căn hộ TB (triệu VNĐ/tháng)       72   11.94   0.93   12.20    1.53   9.83   13.33     -0.58 0.0783
+         search_demand Chỉ số nhu cầu tìm kiếm Google Trends (0-100)       72   54.53  12.19   54.75   12.25  27.00   95.00      0.62 0.2235
+           cpi_yoy_pct                 Chỉ số CPI YoY hàng tháng (%)       72    3.00   1.19    2.90    1.19  -0.97    6.43     -0.15 0.3985
+     interest_rate_pct          Lãi suất tham chiếu 12 tháng (%/năm)       72    5.93   0.87    5.70    1.30   4.60    7.40      0.02 0.1468
+       policy_rate_pct             Lãi suất tái cấp vốn NHNN (%/năm)       72    4.83   0.85    4.50    2.00   4.00    6.25      0.66 0.1766
+          supply_units Nguồn cung căn hộ mở bán/cho thuê (căn/tháng)       72 1182.07 785.18 1149.50 1340.50 174.00 2810.00      0.43 0.6642
+
+2. KIỂM ĐỊNH NGHIỆM ĐƠN VỊ ADF - BẬC GỐC I(0) & SAI PHÂN BẬC 1 I(1) (ts2_adf_stationarity_tests.csv)
+----------------------------------------------------------------------------------------
+                  Biến                            Mô_tả              Bậc_sai_phân  ADF_Statistic  P_Value  Lag_AIC  Critical_5%                    Kết_luận
+rent_price_million_vnd Giá thuê căn hộ TB (triệu/tháng)      Chuỗi gốc I(0) (d=0)        -1.3020   0.6282        2       -2.904 Không dừng (Non-stationary)
+rent_price_million_vnd Giá thuê căn hộ TB (triệu/tháng) Sai phân bậc 1 I(1) (d=1)        -2.8384   0.0044        1       -1.946     Chuỗi dừng (Stationary)
+         search_demand   Nhu cầu tìm kiếm Google Trends      Chuỗi gốc I(0) (d=0)        -4.0329   0.0012        0       -2.903     Chuỗi dừng (Stationary)
+         search_demand   Nhu cầu tìm kiếm Google Trends Sai phân bậc 1 I(1) (d=1)        -7.9587   0.0000        1       -1.946     Chuỗi dừng (Stationary)
+           cpi_yoy_pct      Chỉ số lạm phát CPI YoY (%)      Chuỗi gốc I(0) (d=0)        -3.6958   0.0042        1       -2.904     Chuỗi dừng (Stationary)
+           cpi_yoy_pct      Chỉ số lạm phát CPI YoY (%) Sai phân bậc 1 I(1) (d=1)        -5.8777   0.0000        0       -1.945     Chuỗi dừng (Stationary)
+     interest_rate_pct Lãi suất kỳ hạn 12 tháng (%/năm)      Chuỗi gốc I(0) (d=0)        -2.2101   0.2026        3       -2.905 Không dừng (Non-stationary)
+     interest_rate_pct Lãi suất kỳ hạn 12 tháng (%/năm) Sai phân bậc 1 I(1) (d=1)        -5.1138   0.0000        0       -1.945     Chuỗi dừng (Stationary)
+          supply_units    Nguồn cung căn hộ (căn/tháng)      Chuỗi gốc I(0) (d=0)        -2.0381   0.2701        4       -2.906 Không dừng (Non-stationary)
+          supply_units    Nguồn cung căn hộ (căn/tháng) Sai phân bậc 1 I(1) (d=1)       -10.4888   0.0000        1       -1.946     Chuỗi dừng (Stationary)
+
+3. DIỄN BIẾN THỊ TRƯỜNG QUA 4 GIAI ĐOẠN - TRẢ LỜI RQ8 (ts4_regime_summary_rq8.csv)
+----------------------------------------------------------------------------------------
+                                           Giai_đoạn  Số_tháng  Giá_thuê_TB_triệu  Giá_thuê_Min  Giá_thuê_Max  Google_Trends_TB  CPI_YoY_TB_%  Lãi_suất_12T_TB_%  Nguồn_cung_TB_căn_tháng
+                             1. Tiền COVID-19 (2019)        12              12.58         12.30         12.75              54.1          2.79               6.80                     2233
+           2. Giãn cách COVID-19 (01/2020 - 09/2021)        21              11.06          9.83         12.45              47.5          2.63               5.98                     1262
+          3. Phục hồi hậu mở cửa (10/2021 - 12/2022)        15              11.37         10.22         12.06              65.7          2.95               5.96                     1527
+4. Khan hiếm nguồn cung & tăng giá mới (2023 - 2024)        24              12.73         11.99         13.33              54.0          3.44               5.44                      371
+
+4. TƯƠNG QUAN VỚI BIẾN VĨ MÔ & GOOGLE TRENDS - TRẢ LỜI RQ9 (ts3_macro_correlations_rq9.csv)
+----------------------------------------------------------------------------------------
+       Biến_vĩ_mô                             Mô_tả  Pearson_r_Level  P_Value_Level  Spearman_rho  Best_Lag_Months  Pearson_r_BestLag  Pearson_r_vs_DeltaRent  P_Value_vs_DeltaRent
+    search_demand    Nhu cầu tìm kiếm Google Trends           0.1949         0.1009        0.1298                3             0.2384                  0.5488                0.0000
+      cpi_yoy_pct              Lạm phát CPI YoY (%)           0.4597         0.0000        0.4281                0             0.4597                 -0.1469                0.2217
+interest_rate_pct         Lãi suất 12 tháng (%/năm)          -0.0225         0.8510       -0.1491                0            -0.0225                 -0.1801                0.1328
+  policy_rate_pct Lãi suất tái cấp vốn NHNN (%/năm)           0.5044         0.0000        0.5744                0             0.5044                 -0.0540                0.6548
+     supply_units     Nguồn cung căn hộ (căn/tháng)          -0.1601         0.1792       -0.2559                3            -0.2028                  0.0166                0.8908
+
+5. SO SÁNH 5 MÔ HÌNH DỰ BÁO CHUỖI THỜI GIAN TRÊN TẬP TEST 2024 - TRẢ LỜI RQ10 (ts5_model_comparison_rq10.csv)
+----------------------------------------------------------------------------------------
+ Hạng                     Mô_hình                             Đặc_trưng_mô_hình  Train_Months  Test_Months    MAE   RMSE   MAPE     R2
+    1               ARIMAX(1,1,1)      ARIMA kết hợp biến vĩ mô & Google Trends            60           12 0.0214 0.0263 0.0016 0.9822
+    2    SARIMAX(1,1,1)(1,0,1,12)     SARIMA kết hợp biến vĩ mô & Google Trends            60           12 0.0202 0.0285 0.0015 0.9792
+    3                ARIMA(1,1,1) Đơn biến tự hồi quy tích hợp trung bình trượt            60           12 0.0251 0.0363 0.0019 0.9662
+    4     SARIMA(1,1,1)(1,0,1,12)    ARIMA có thành phần mùa vụ chu kỳ 12 tháng            60           12 0.0308 0.0416 0.0024 0.9555
+    5 LSTM (Lookback=6, Units=24)   Mạng nơ-ron hồi quy bộ nhớ dài-ngắn đa biến            60           12 0.0981 0.1122 0.0075 0.6765
+
+6. BẢNG TỔNG HỢP ĐỒNG NHẤT CẢ 10 MÔ HÌNH (5 ML + 5 TIME SERIES) - TRẢ LỜI RQ10 (rq10_all_10_models_summary.csv)
+----------------------------------------------------------------------------------------
+                                 Nhóm_mô_hình                     Mô_hình    MAE   RMSE   MAPE     R2
+    Dataset 1 - Machine Learning (Cấp căn hộ)                     XGBoost 1.2351 1.9232 0.1206 0.8835
+    Dataset 1 - Machine Learning (Cấp căn hộ)               Random Forest 1.2937 1.9324 0.1288 0.8824
+    Dataset 1 - Machine Learning (Cấp căn hộ)               Decision Tree 1.4497 2.1879 0.1418 0.8492
+    Dataset 1 - Machine Learning (Cấp căn hộ)            Ridge Regression 1.4762 2.2238 0.1562 0.8442
+    Dataset 1 - Machine Learning (Cấp căn hộ)           Linear Regression 1.4777 2.2258 0.1565 0.8439
+Dataset 2 - Chuỗi thời gian (Toàn thị trường)               ARIMAX(1,1,1) 0.0214 0.0263 0.0016 0.9822
+Dataset 2 - Chuỗi thời gian (Toàn thị trường)    SARIMAX(1,1,1)(1,0,1,12) 0.0202 0.0285 0.0015 0.9792
+Dataset 2 - Chuỗi thời gian (Toàn thị trường)                ARIMA(1,1,1) 0.0251 0.0363 0.0019 0.9662
+Dataset 2 - Chuỗi thời gian (Toàn thị trường)     SARIMA(1,1,1)(1,0,1,12) 0.0308 0.0416 0.0024 0.9555
+Dataset 2 - Chuỗi thời gian (Toàn thị trường) LSTM (Lookback=6, Units=24) 0.0981 0.1122 0.0075 0.6765
+
+7. ĐỐI CHIẾU GIÁ THUÊ THỰC TẾ VÀ DỰ BÁO TỪNG THÁNG NĂM 2024 (ts6_test_2024_monthly_predictions.csv)
+----------------------------------------------------------------------------------------
+  month  Actual_Rent_Million_VND  ARIMA_Pred  ARIMAX_Pred  SARIMA_Pred  SARIMAX_Pred  LSTM_Pred
+2024-01                    12.71      12.711       12.712       12.725        12.711     12.720
+2024-02                    12.81      12.729       12.822       12.734        12.817     12.738
+2024-03                    12.87      12.855       12.904       12.849        12.891     12.799
+2024-04                    12.88      12.910       12.860       12.895        12.844     12.818
+2024-05                    12.97      12.906       12.916       12.885        12.897     12.796
+2024-06                    13.00      13.014       13.023       12.994        13.006     12.856
+2024-07                    13.08      13.027       13.069       13.012        13.061     12.894
+2024-08                    13.16      13.128       13.200       13.122        13.201     12.993
+2024-09                    13.21      13.208       13.212       13.213        13.220     13.103
+2024-10                    13.26      13.254       13.241       13.267        13.254     13.183
+2024-11                    13.30      13.300       13.267       13.317        13.280     13.238
+2024-12                    13.33      13.332       13.322       13.349        13.332     13.285
+
+8. DỰ BÁO XU HƯỚNG GIÁ THUÊ 12 THÁNG NĂM 2025 (ts7_future_forecast_2025.csv)
+----------------------------------------------------------------------------------------
+  month  Forecast_Rent_Million_VND  CI_95_Low  CI_95_High    Model_Used
+2025-01                      13.38      13.33       13.43 ARIMAX(1,1,1)
+2025-02                      13.43      13.38       13.49 ARIMAX(1,1,1)
+2025-03                      13.49      13.43       13.54 ARIMAX(1,1,1)
+2025-04                      13.54      13.48       13.60 ARIMAX(1,1,1)
+2025-05                      13.59      13.52       13.65 ARIMAX(1,1,1)
+2025-06                      13.64      13.57       13.71 ARIMAX(1,1,1)
+2025-07                      13.69      13.62       13.76 ARIMAX(1,1,1)
+2025-08                      13.74      13.67       13.82 ARIMAX(1,1,1)
+2025-09                      13.80      13.72       13.87 ARIMAX(1,1,1)
+2025-10                      13.86      13.78       13.94 ARIMAX(1,1,1)
+2025-11                      13.93      13.85       14.01 ARIMAX(1,1,1)
+2025-12                      14.01      13.92       14.09 ARIMAX(1,1,1)
+
+9. DANH SÁCH 5 BIỂU ĐỒ CHUẨN IN ẤN (300 DPI) ĐÃ XUẤT
+----------------------------------------------------------------------------------------
+- D:\Code\IS403\outputs\dataset2_timeseries\figures\10_timeseries_overview_rq8.png
+- D:\Code\IS403\outputs\dataset2_timeseries\figures\11_adf_differencing_acf_pacf.png
+- D:\Code\IS403\outputs\dataset2_timeseries\figures\12_macro_correlations_rq9.png
+- D:\Code\IS403\outputs\dataset2_timeseries\figures\13_ts_model_comparison_rq10.png
+- D:\Code\IS403\outputs\dataset2_timeseries\figures\14_ts_full_trajectory_and_2025_forecast.png
+========================================================================================

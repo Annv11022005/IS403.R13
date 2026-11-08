@@ -1,0 +1,9 @@
+﻿Biến,Mô_tả,Coefficient,Std_Error,t_Stat,P_Value,CI_95_Low,CI_95_High,Beta_Chuẩn_hóa,VIF,Kết_luận
+Intercept (Hệ số chặn),Giá cơ sở khi các biến bằng 0,-0.1175,0.294,-0.399,0.6896,-0.694,0.459,,,Không ý nghĩa
+area_m2,Diện tích (m²),0.1395,0.0051,27.541,< 0.0001,0.13,0.149,0.5898,4.75,Có ý nghĩa (Tăng giá (+))
+bedrooms,Số phòng ngủ,0.6458,0.1928,3.349,0.0008,0.268,1.024,0.076,5.33,Có ý nghĩa (Tăng giá (+))
+bathrooms,Số phòng vệ sinh (WC),0.0099,0.2126,0.047,0.9628,-0.407,0.427,0.0009,3.72,Không có ý nghĩa thống kê (p >= 0.05)
+furniture_score,Điểm nội thất (0–3),1.2913,0.0987,13.082,< 0.0001,1.098,1.485,0.1293,1.01,Có ý nghĩa (Tăng giá (+))
+distance_to_center_km,Khoảng cách tới Q1 (km),-0.3542,0.0154,-23.022,< 0.0001,-0.384,-0.324,-0.2455,1.18,Có ý nghĩa (Giảm giá (-))
+has_pool,Tiện ích Hồ bơi (0/1),1.9849,0.2455,8.085,< 0.0001,1.504,2.466,0.1677,4.46,Có ý nghĩa (Tăng giá (+))
+has_gym,Tiện ích Phòng Gym (0/1),1.3622,0.239,5.699,< 0.0001,0.894,1.831,0.1135,4.11,Có ý nghĩa (Tăng giá (+))

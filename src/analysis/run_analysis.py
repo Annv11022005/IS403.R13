@@ -1,36 +1,37 @@
 # -*- coding: utf-8 -*-
-"""
-Entry-point chạy trọn bộ Giai đoạn 1 cho Dataset 1:
-  - Bước 1.1: Thống kê mô tả đa tầng (src/dataset1/descriptive_stats.py)
-  - Bước 1.2: Trực quan hóa 5 biểu đồ cốt lõi 300 DPI (src/dataset1/visualization.py)
-  - Bước 1.3: Kiểm định giả thuyết thống kê 3 lớp (src/dataset1/hypothesis_testing.py)
-  - Bước 1.4: Tổng hợp kết luận RQ1–RQ6 & định hướng kỹ thuật cho Giai đoạn 2 (ML Pipeline)
-
-Cách chạy từ thư mục gốc d:\Code\IS403:
-    python -m src.dataset1.run_phase1
-"""
-
 from pathlib import Path
 import sys
 
-# Đảm bảo import được package `src` dù chạy bằng `python -m` hay `python src/...`
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import pandas as pd
 
+from src.analysis.descriptive_stats import run_descriptive_pipeline
+from src.analysis.hypothesis_testing import run_hypothesis_pipeline
+from src.analysis.ols_econometrics import run_ols_pipeline
+from src.analysis.ts_stationarity_eda import (
+    compute_ts_descriptive_stats,
+    plot_ts_eda_figures,
+    run_adf_stationarity_suite,
+    run_macro_correlations_and_regimes,
+)
+from src.analysis.visualization import run_visualization_pipeline
 from src.config import (
     DATASET1_CSV,
+    DATASET2_CSV,
+    MODELING_TABLES_DIR,
     PHASE1_FIGURES_DIR,
     PHASE1_REPORT_TXT,
     PHASE1_TABLES_DIR,
+    TS_FIGURES_DIR,
+    TS_TABLES_DIR,
+    ensure_modeling_dirs,
     ensure_phase1_dirs,
+    ensure_ts_dirs,
     setup_matplotlib_style,
 )
-from src.dataset1.descriptive_stats import run_descriptive_pipeline
-from src.dataset1.hypothesis_testing import run_hypothesis_pipeline
-from src.dataset1.visualization import run_visualization_pipeline
 
 
 def build_phase1_report(
@@ -39,12 +40,11 @@ def build_phase1_report(
     pearson_df: pd.DataFrame,
     hyp_res: dict[str, pd.DataFrame],
 ) -> str:
-    """Tạo báo cáo tổng hợp Giai đoạn 1 (Bước 1.1 -> 1.4) chuẩn bị cho báo cáo Word & Giai đoạn 2."""
+    # Tổng hợp báo cáo Giai đoạn 1 (Dataset 1)
     num_df = desc_res["numeric"].set_index("Biến")
     skew_raw = num_df.loc["price_million_vnd", "Skewness"]
     skew_log = num_df.loc["log_price_million_vnd", "Skewness"]
 
-    # Tìm các cặp biến độc lập có tương quan nội tại lớn (|r| >= 0.65) cảnh báo đa cộng tuyến
     feat_cols = [
         "area_m2",
         "bedrooms",
@@ -74,14 +74,14 @@ def build_phase1_report(
         "1. [MỤC C.1] THỐNG KÊ MÔ TẢ THEO 3 QUẬN CHÍNH",
         "--------------------------------------------------------------------------------------",
         desc_res["district"][
-            ["district_std", "Count", "Mean", "Median", "Std", "Skewness", "Kurtosis", "Mean_Đơn_giá_m2", "Tỷ_lệ_Chung_cư_TM_%"]
+            ["district_std", "Count", "Mean", "Median", "Std", "Skewness", "Kurtosis", "Mean_Đơn_giá_m2", "Tỷ_lệ_Chung_cư_TM"]
         ].to_string(index=False),
         "",
         "--------------------------------------------------------------------------------------",
         "2. [MỤC C.1 MỞ RỘNG] THỐNG KÊ THEO 5 TIỂU KHU VỰC (TÁCH QUẬN 2, QUẬN 9, THỦ ĐỨC CŨ)",
         "--------------------------------------------------------------------------------------",
         desc_res["subdistrict"][
-            ["sub_district", "Count", "Mean", "Median", "Std", "Skewness", "Kurtosis", "Mean_Đơn_giá_m2", "Tỷ_lệ_Chung_cư_TM_%"]
+            ["sub_district", "Count", "Mean", "Median", "Std", "Skewness", "Kurtosis", "Mean_Đơn_giá_m2", "Tỷ_lệ_Chung_cư_TM"]
         ].to_string(index=False),
         "",
         "--------------------------------------------------------------------------------------",
@@ -117,7 +117,7 @@ def build_phase1_report(
         "8. [BƯỚC 1.4] ĐÚC KẾT QUYẾT ĐỊNH KỸ THUẬT CHUYỂN GIAO SANG GIAI ĐOẠN 2 (ML PIPELINE)",
         "--------------------------------------------------------------------------------------",
         f"  [1] Biến mục tiêu: Giá gốc lệch phải (Skewness = {skew_raw:+.2f}), khi lấy ln(giá) giảm còn {skew_log:+.2f}.",
-        "      -> Ở Giai đoạn 2 nên đối chứng thêm biến đổi log-target để tối ưu sai số tỷ lệ MAPE (%).",
+        "      -> Ở Giai đoạn 2 nên đối chứng thêm biến đổi log-target để tối ưu sai số tỷ lệ MAPE.",
         "  [2] Biến không gian & phân khúc: Tách `sub_district` (5 khu vực) làm tăng mạnh Eta² so với",
         "      chỉ gộp 3 quận chính; đồng thời `is_commercial_project` tách bạch hoàn toàn 2 mặt bằng giá.",
         "      -> Bắt buộc đưa `sub_district`, `apartment_type`, `is_commercial_project` (One-Hot) cùng",
@@ -142,34 +142,29 @@ def build_phase1_report(
 
 
 def main() -> None:
-    if not DATASET1_CSV.exists():
-        print(f"[LỖI] Không tìm thấy file {DATASET1_CSV}. Hãy chạy `python clean_chotot.py` trước.")
-        sys.exit(1)
-
+    # Chạy toàn bộ nhánh Phân tích (Dataset 1 EDA/ANOVA/OLS & Dataset 2 ADF/Tương quan vĩ mô)
     ensure_phase1_dirs()
+    ensure_modeling_dirs()
+    ensure_ts_dirs()
     setup_matplotlib_style()
 
-    print("=" * 72)
-    print("ĐANG CHẠY GIAI ĐOẠN 1 (DATASET 1): THỐNG KÊ, TRỰC QUAN HÓA & KIỂM ĐỊNH")
-    print("=" * 72)
+    df1 = pd.read_csv(DATASET1_CSV, encoding="utf-8-sig")
+    desc_res = run_descriptive_pipeline(df1, PHASE1_TABLES_DIR)
+    pearson_df, _ = run_visualization_pipeline(df1, PHASE1_FIGURES_DIR, PHASE1_TABLES_DIR)
+    hyp_res = run_hypothesis_pipeline(df1, PHASE1_TABLES_DIR)
+    run_ols_pipeline(df1, MODELING_TABLES_DIR)
 
-    df = pd.read_csv(DATASET1_CSV, encoding="utf-8-sig")
-    print(f"[1/4] Đã đọc {len(df):,} dòng dữ liệu sạch từ {DATASET1_CSV.relative_to(PROJECT_ROOT)}")
-
-    print("[2/4] Đang tính toán Thống kê mô tả đa tầng (Bước 1.1)...")
-    desc_res = run_descriptive_pipeline(df, PHASE1_TABLES_DIR)
-
-    print("[3/4] Đang kết xuất 5 biểu đồ EDA độ phân giải 300 DPI (Bước 1.2)...")
-    pearson_df, _ = run_visualization_pipeline(df, PHASE1_FIGURES_DIR, PHASE1_TABLES_DIR)
-
-    print("[4/4] Đang chạy Kiểm định giả thuyết 3 lớp & Hậu định Tukey HSD (Bước 1.3)...")
-    hyp_res = run_hypothesis_pipeline(df, PHASE1_TABLES_DIR)
-
-    report_text = build_phase1_report(df, desc_res, pearson_df, hyp_res)
+    report_text = build_phase1_report(df1, desc_res, pearson_df, hyp_res)
     PHASE1_REPORT_TXT.write_text(report_text, encoding="utf-8")
+    print(report_text)
 
-    print("\n" + report_text)
+    df2 = pd.read_csv(DATASET2_CSV)
+    compute_ts_descriptive_stats(df2, TS_TABLES_DIR)
+    adf_df = run_adf_stationarity_suite(df2, TS_TABLES_DIR)
+    run_macro_correlations_and_regimes(df2, TS_TABLES_DIR)
+    plot_ts_eda_figures(df2, adf_df, TS_FIGURES_DIR)
 
 
 if __name__ == "__main__":
     main()
+

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Bước 1.1: Thống kê mô tả đa tầng cho Dataset 1 (Mục C.1)
-- Bảng 1: Tổng quan toàn bộ biến định lượng (kèm đối chiếu log(giá) giảm độ lệch phải)
-- Bảng 2A & 2B: Thống kê giá thuê & đơn giá/m² theo 3 Quận chính và 5 Tiểu khu vực
-- Bảng 3: Thống kê chéo Tiểu khu vực x Phân khúc căn hộ (giải trình Nghịch lý Simpson)
-"""
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -14,7 +7,7 @@ from src.config import NUMERIC_FEATURES_META
 
 
 def compute_numeric_overview(df: pd.DataFrame) -> pd.DataFrame:
-    """Tính thống kê mô tả đầy đủ cho tất cả biến định lượng và biến log(price)."""
+    # Thống kê mô tả các biến định lượng
     work = df.copy()
     work["log_price_million_vnd"] = np.log(work["price_million_vnd"].clip(lower=0.1))
 
@@ -42,31 +35,28 @@ def compute_numeric_overview(df: pd.DataFrame) -> pd.DataFrame:
             "Skewness": round(float(s.skew()), 3),
             "Kurtosis": round(float(s.kurt()), 3),
             "Min": round(float(s.min()), 3),
-            "Q1_25%": round(q1, 3),
-            "Q3_75%": round(q3, 3),
+            "Q1": round(q1, 3),
+            "Q3": round(q3, 3),
             "Max": round(float(s.max()), 3),
         })
     return pd.DataFrame(rows)
 
 
 def compute_spatial_stats(df: pd.DataFrame, group_col: str) -> pd.DataFrame:
-    """
-    Tính thống kê mô tả giá thuê (price_million_vnd) kèm đơn giá/m² và tỷ lệ chung cư TM
-    theo cột phân nhóm không gian (`district_std` hoặc `sub_district`).
-    """
+    # Thống kê giá thuê theo khu vực
     total_n = len(df)
     rows = []
 
     for grp_name, grp in df.groupby(group_col):
         p = grp["price_million_vnd"].dropna().astype(float)
         pm2 = grp["price_per_m2"].dropna().astype(float)
-        comm_ratio = float(grp["is_commercial_project"].mean() * 100.0)
+        comm_ratio = float(grp["is_commercial_project"].mean())
         q1, q3 = float(p.quantile(0.25)), float(p.quantile(0.75))
 
         rows.append({
             group_col: grp_name,
             "Count": int(len(p)),
-            "Tỷ_trọng_%": round(len(p) * 100.0 / max(total_n, 1), 1),
+            "Tỷ_trọng": round(len(p) / max(total_n, 1), 4),
             "Mean": round(float(p.mean()), 2),
             "Median": round(float(p.median()), 2),
             "Std": round(float(p.std(ddof=1)), 2),
@@ -77,18 +67,17 @@ def compute_spatial_stats(df: pd.DataFrame, group_col: str) -> pd.DataFrame:
             "Max": round(float(p.max()), 2),
             "Mean_Đơn_giá_m2": round(float(pm2.mean()), 3),
             "Median_Đơn_giá_m2": round(float(pm2.median()), 3),
-            "Tỷ_lệ_Chung_cư_TM_%": round(comm_ratio, 1),
+            "Tỷ_lệ_Chung_cư_TM": round(comm_ratio, 4),
         })
 
     res = pd.DataFrame(rows).sort_values("Mean", ascending=False).reset_index(drop=True)
 
-    # Bổ sung dòng Tổng thể ở cuối bảng
     p_all = df["price_million_vnd"].dropna().astype(float)
     pm2_all = df["price_per_m2"].dropna().astype(float)
     overall = pd.DataFrame([{
         group_col: "Toàn bộ mẫu",
         "Count": int(len(p_all)),
-        "Tỷ_trọng_%": 100.0,
+        "Tỷ_trọng": 1.0000,
         "Mean": round(float(p_all.mean()), 2),
         "Median": round(float(p_all.median()), 2),
         "Std": round(float(p_all.std(ddof=1)), 2),
@@ -99,16 +88,13 @@ def compute_spatial_stats(df: pd.DataFrame, group_col: str) -> pd.DataFrame:
         "Max": round(float(p_all.max()), 2),
         "Mean_Đơn_giá_m2": round(float(pm2_all.mean()), 3),
         "Median_Đơn_giá_m2": round(float(pm2_all.median()), 3),
-        "Tỷ_lệ_Chung_cư_TM_%": round(float(df["is_commercial_project"].mean() * 100.0), 1),
+        "Tỷ_lệ_Chung_cư_TM": round(float(df["is_commercial_project"].mean()), 4),
     }])
     return pd.concat([res, overall], ignore_index=True)
 
 
 def compute_segment_crosstab(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Thống kê chéo Tiểu khu vực x Phân khúc (Chung cư thương mại vs CHDV/Mini)
-    nhằm bóc tách mặt bằng giá thực và kiểm chứng Nghịch lý Simpson.
-    """
+    # Thống kê chéo Tiểu khu vực x Phân khúc căn hộ
     work = df.copy()
     work["Phân_khúc"] = np.where(
         work["is_commercial_project"] == 1,
@@ -136,7 +122,7 @@ def compute_segment_crosstab(df: pd.DataFrame) -> pd.DataFrame:
                 "Tiểu_khu_vực": sub_name,
                 "Phân_khúc": seg_name,
                 "Count": int(len(grp)),
-                "Tỷ_lệ_trong_khu_vực_%": round(len(grp) * 100.0 / max(sub_total, 1), 1),
+                "Tỷ_lệ_trong_khu_vực": round(len(grp) / max(sub_total, 1), 4),
                 "Mean_Giá_thuê": round(float(p.mean()), 2),
                 "Median_Giá_thuê": round(float(p.median()), 2),
                 "Std_Giá_thuê": round(float(p.std(ddof=1)), 2) if len(p) > 1 else 0.0,
@@ -148,7 +134,6 @@ def compute_segment_crosstab(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_descriptive_pipeline(df: pd.DataFrame, out_dir: Path) -> dict[str, pd.DataFrame]:
-    """Chạy toàn bộ Bước 1.1 và lưu 4 bảng CSV vào thư mục tables."""
     numeric_df = compute_numeric_overview(df)
     district_df = compute_spatial_stats(df, "district_std")
     subdistrict_df = compute_spatial_stats(df, "sub_district")
@@ -165,3 +150,4 @@ def run_descriptive_pipeline(df: pd.DataFrame, out_dir: Path) -> dict[str, pd.Da
         "subdistrict": subdistrict_df,
         "crosstab": crosstab_df,
     }
+

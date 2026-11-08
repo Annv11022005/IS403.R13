@@ -1,0 +1,8 @@
+﻿Loại_kiểm_tra,Đối_tượng,Thống_kê,P_Value,Đánh_giá
+Phân phối chuẩn (D'Agostino K²),price_million_vnd (Giá gốc),885.73,< 0.0001,Lệch phải (Skew=1.56) -> Cần kèm Kruskal-Wallis / Mann-Whitney
+Phân phối chuẩn (D'Agostino K²),ln(price_million_vnd) (Log giá),188.6,< 0.0001,Cân đối hơn rõ rệt (Skew=0.55)
+Đồng nhất phương sai (Levene),3 Quận chính (RQ1),29.48,< 0.0001,Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+Đồng nhất phương sai (Levene),5 Tiểu khu vực (RQ1 chi tiết),44.84,< 0.0001,Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+Đồng nhất phương sai (Levene),4 Cấp nội thất (RQ4),24.24,< 0.0001,Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+Đồng nhất phương sai (Levene),Hồ bơi Có/Không (RQ6),505.37,< 0.0001,Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test
+Đồng nhất phương sai (Levene),Phòng Gym Có/Không (RQ6),422.91,< 0.0001,Phương sai khác biệt (p < 0.05) -> Bổ sung Welch ANOVA / Welch t-test

@@ -1,0 +1,7 @@
+﻿Câu_hỏi_NC,Biến_phân_tích,Nội_dung_kiểm_định,Kiểm_định_tham_số,Kiểm_định_Welch,Kiểm_định_phi_tham_số,Eta_Squared,Độ_lớn_tác_động,Kết_luận
+RQ1,district_std,"Giá thuê giữa 3 quận chính (Bình Thạnh, Q7, Thủ Đức)",ANOVA F = 11.76 (p < 0.0001),Welch F = 12.05 (p < 0.0001),Kruskal H = 41.82 (p < 0.0001),0.0073,Rất nhỏ (Eta² = 0.0073),Bác bỏ H0 (Khác biệt có ý nghĩa thống kê)
+RQ1 (Chi tiết),sub_district,"Giá thuê giữa 5 tiểu khu vực (tách Q2, Q9, Thủ Đức cũ)",ANOVA F = 55.12 (p < 0.0001),Welch F = 49.54 (p < 0.0001),Kruskal H = 229.12 (p < 0.0001),0.0647,Trung bình (Eta² = 0.0647),Bác bỏ H0 (Khác biệt có ý nghĩa thống kê)
+RQ4,furniture,Giá thuê theo 4 tình trạng nội thất,ANOVA F = 36.96 (p < 0.0001),Welch F = 31.25 (p < 0.0001),Kruskal H = 112.72 (p < 0.0001),0.0336,Nhỏ (Eta² = 0.0336),Bác bỏ H0 (Khác biệt có ý nghĩa thống kê)
+RQ6,has_pool,Chênh lệch giá thuê khi có Hồ bơi (+6.60 triệu/tháng),Welch t = 32.52 (p < 0.0001),ΔMean = +6.60 tr,Mann-Whitney p < 0.0001,0.3107,Lớn (Eta² = 0.3107),Bác bỏ H0 (Tăng giá có ý nghĩa thống kê)
+RQ6,has_gym,Chênh lệch giá thuê khi có Phòng Gym (+6.62 triệu/tháng),Welch t = 32.14 (p < 0.0001),ΔMean = +6.62 tr,Mann-Whitney p < 0.0001,0.3044,Lớn (Eta² = 0.3044),Bác bỏ H0 (Tăng giá có ý nghĩa thống kê)
+Phân khúc,is_commercial_project,Chênh lệch Chung cư thương mại vs CHDV/Mini (+6.20 triệu/tháng),Welch t = 39.62 (p < 0.0001),ΔMean = +6.20 tr,Mann-Whitney p < 0.0001,0.2996,Lớn (Eta² = 0.2996),Bác bỏ H0 (Tăng giá có ý nghĩa thống kê)
