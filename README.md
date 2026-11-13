@@ -22,7 +22,7 @@
 | 1   | 24521696 | Lê Nguyễn Phương Uyên |                                 | 24521696@gm.uit.edu.vn  |
 | 2   | 24521979 | Lê Nguyễn Thanh Vân   |                                 | 24521979@gm.uit.edu.vn  |
 | 3   | 23520022 | Nguyễn Văn Ân         | https://github.com/Annv11022005 | 23520022@gm.uit.edu.vn  |
-| 4   | 24520304 | Đào Trọng Đình        |                                 | 24520304@gm.uit.edu.vn  |
+| 4   | 24520304 | Đào Trọng Định        |                                 | 24520304@gm.uit.edu.vn  |
 
 ## TỔNG QUAN ĐỀ TÀI
 
