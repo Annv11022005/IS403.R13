@@ -8,6 +8,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import pandas as pd
 
+from src.data_validation import load_validated_data
+
 from src.analysis.descriptive_stats import run_descriptive_pipeline
 from src.analysis.hypothesis_testing import run_hypothesis_pipeline
 from src.analysis.ols_econometrics import run_ols_pipeline
@@ -143,12 +145,12 @@ def build_phase1_report(
 
 def main() -> None:
     # Chạy toàn bộ nhánh Phân tích (Dataset 1 EDA/ANOVA/OLS & Dataset 2 ADF/Tương quan vĩ mô)
+    df1, df2 = load_validated_data()
     ensure_phase1_dirs()
     ensure_modeling_dirs()
     ensure_ts_dirs()
     setup_matplotlib_style()
 
-    df1 = pd.read_csv(DATASET1_CSV, encoding="utf-8-sig")
     desc_res = run_descriptive_pipeline(df1, PHASE1_TABLES_DIR)
     pearson_df, _ = run_visualization_pipeline(df1, PHASE1_FIGURES_DIR, PHASE1_TABLES_DIR)
     hyp_res = run_hypothesis_pipeline(df1, PHASE1_TABLES_DIR)
@@ -158,7 +160,6 @@ def main() -> None:
     PHASE1_REPORT_TXT.write_text(report_text, encoding="utf-8")
     print(report_text)
 
-    df2 = pd.read_csv(DATASET2_CSV)
     compute_ts_descriptive_stats(df2, TS_TABLES_DIR)
     adf_df = run_adf_stationarity_suite(df2, TS_TABLES_DIR)
     run_macro_correlations_and_regimes(df2, TS_TABLES_DIR)

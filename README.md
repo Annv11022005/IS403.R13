@@ -58,3 +58,24 @@ IS403/
    ```bash
    python -m src.model.run_models
    ```
+
+
+## Dữ liệu và kiểm tra đầu vào
+
+Hai lệnh phân tích đọc các tệp trong `data/processed/` và ghi đè các tệp kết quả tương ứng trong `outputs/`. Chúng không tự xóa dữ liệu hay thư mục. Kiểm tra dữ liệu mà không chạy phân tích bằng:
+
+```bash
+python -m src.data_validation
+```
+
+Bước kiểm tra xác nhận các cột cần thiết, dữ liệu số, mã tin trùng, giá trị cơ bản và tính liên tục của chuỗi tháng. Kiểm tra này **không xác minh nguồn gốc, độ chính xác hoặc tính đại diện** của dữ liệu.
+
+Xem [tài liệu dữ liệu](data/README.md) để biết những gì đã xác nhận và những khoảng trống về nguồn, phương pháp xử lý. Hiện dự án chưa có đủ mã và nguồn để tái lập hai tệp đã xử lý; không coi các kết quả là đã được xác thực nguồn gốc.
+
+
+## Đọc kết quả và chạy kiểm thử
+
+- Kết quả dự báo **từng căn hộ**: `outputs/dataset1_modeling/`. Chọn mô hình theo CV trên train; bảng chỉ ghi kết quả test cho mô hình được chọn.
+- Kết quả dự báo **chuỗi giá trung bình hàng tháng**: `outputs/dataset2_timeseries/`. Dùng validation năm 2023 để chọn mô hình và đánh giá cuốn chiếu một tháng trong năm 2024.
+- MAE và RMSE có đơn vị triệu đồng/tháng; MAPE là tỷ lệ thập phân (`0,12` là 12%) và có thể lớn hơn 1; R² không có đơn vị và có thể âm. Hai bài toán có mục tiêu và dữ liệu khác nhau, nên không so sánh trực tiếp sai số giữa chúng.
+- Chạy kiểm thử: `python -m unittest discover -s tests -v`. Các kiểm thử dùng mô hình giả cho nhánh cuốn chiếu để kiểm tra luồng, không thay thế việc huấn luyện và đánh giá mô hình thực tế.

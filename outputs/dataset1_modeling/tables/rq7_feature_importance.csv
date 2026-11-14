@@ -1,27 +1,27 @@
 ﻿Biến,Mô_tả,Importance_RF,Importance_XGB,Importance_Tree,Permutation_Importance
-area_m2,Diện tích căn hộ (m²),0.4535,0.1693,0.3114,0.6071
-te_project_pm2,Đặc trưng Dự án/Tòa nhà (Target Encoded),0.2647,0.064,0.1644,0.3059
-bathrooms,Số phòng vệ sinh (WC),0.0566,0.2239,0.1402,0.005
-bedrooms,Số phòng ngủ,0.0392,0.1524,0.0958,0.0175
-te_ward_pm2,Vị trí Phường/Xã (Target Encoded),0.1005,0.0221,0.0613,0.0226
-has_pool,Tiện ích Hồ bơi,0.0098,0.0569,0.0334,0.0073
-distance_to_center_km,Khoảng cách đến Q1 (km),0.0385,0.016,0.0273,0.0166
-is_commercial_project,Phân khúc Chung cư thương mại,0.0021,0.0509,0.0265,0.0008
-has_gym,Tiện ích Phòng Gym,0.0097,0.0306,0.0201,0.0059
-apartment_type_Nhà ở xã hội,Loại hình: Nhà ở xã hội,0.0001,0.0347,0.0174,0.0
-apartment_type_Duplex,Loại hình: Duplex,0.0009,0.0231,0.012,0.0007
-sub_district_Quận 9 (Thủ Đức),Khu vực: Quận 9 (Thủ Đức),0.0024,0.0179,0.0102,0.0006
-sub_district_Quận 7,Khu vực: Quận 7,0.0031,0.0162,0.0096,0.0025
-furniture_Nội thất cao cấp,Nội thất: Nội thất cao cấp,0.0037,0.0134,0.0086,0.0013
-apartment_type_Chung cư thương mại,Loại hình: Chung cư thương mại,0.0023,0.0139,0.0081,0.0002
-"apartment_type_Căn hộ dịch vụ, mini","Loại hình: Căn hộ dịch vụ, mini",0.0011,0.0146,0.0078,0.0006
-apartment_type_Officetel,Loại hình: Officetel,0.0003,0.0149,0.0076,0.0001
-furniture_score,Điểm chất lượng nội thất (0–3),0.0052,0.0086,0.0069,0.0028
-sub_district_Quận 2 (Thủ Đức),Khu vực: Quận 2 (Thủ Đức),0.0014,0.0125,0.0069,0.0007
-sub_district_Bình Thạnh,Khu vực: Bình Thạnh,0.0016,0.009,0.0053,0.0006
-furniture_Hoàn thiện cơ bản,Nội thất: Hoàn thiện cơ bản,0.0015,0.0084,0.005,0.0012
-sub_district_Thủ Đức cũ (Thủ Đức),Khu vực: Thủ Đức cũ (Thủ Đức),0.0003,0.0071,0.0037,0.0
+area_m2,Diện tích căn hộ (m²),0.5497,0.1693,0.3595,0.6078
+bathrooms,Số phòng vệ sinh (WC),0.0535,0.2239,0.1387,0.0059
+te_project_pm2,Đặc trưng Dự án/Tòa nhà (Target Encoded),0.2106,0.064,0.1373,0.2698
+bedrooms,Số phòng ngủ,0.0515,0.1524,0.102,0.0118
+te_ward_pm2,Vị trí Phường/Xã (Target Encoded),0.0559,0.0221,0.039,0.0266
+has_pool,Tiện ích Hồ bơi,0.0074,0.0569,0.0321,0.0085
+distance_to_center_km,Khoảng cách đến Q1 (km),0.0384,0.016,0.0272,0.0382
+is_commercial_project,Phân khúc Chung cư thương mại,0.0023,0.0509,0.0266,0.0036
+has_gym,Tiện ích Phòng Gym,0.0071,0.0306,0.0188,0.0061
+apartment_type_Nhà ở xã hội,Loại hình: Nhà ở xã hội,0.0004,0.0347,0.0176,0.0002
+apartment_type_Duplex,Loại hình: Duplex,0.0032,0.0231,0.0131,0.0036
+sub_district_Quận 7,Khu vực: Quận 7,0.0031,0.0162,0.0096,0.0031
+sub_district_Quận 9 (Thủ Đức),Khu vực: Quận 9 (Thủ Đức),0.0009,0.0179,0.0094,0.0005
+"apartment_type_Căn hộ dịch vụ, mini","Loại hình: Căn hộ dịch vụ, mini",0.0019,0.0146,0.0082,0.0023
+furniture_Nội thất cao cấp,Nội thất: Nội thất cao cấp,0.0027,0.0134,0.008,0.0025
+apartment_type_Chung cư thương mại,Loại hình: Chung cư thương mại,0.0016,0.0139,0.0078,0.0014
+apartment_type_Officetel,Loại hình: Officetel,0.0007,0.0149,0.0078,0.0003
+sub_district_Quận 2 (Thủ Đức),Khu vực: Quận 2 (Thủ Đức),0.0012,0.0125,0.0068,0.0009
+furniture_score,Điểm chất lượng nội thất (0–3),0.0037,0.0086,0.0061,0.0036
+sub_district_Bình Thạnh,Khu vực: Bình Thạnh,0.0009,0.009,0.0049,0.0009
+furniture_Hoàn thiện cơ bản,Nội thất: Hoàn thiện cơ bản,0.0012,0.0084,0.0048,0.0009
+sub_district_Thủ Đức cũ (Thủ Đức),Khu vực: Thủ Đức cũ (Thủ Đức),0.0004,0.0071,0.0038,0.0002
 apartment_type_Penthouse,Loại hình: Penthouse,0.0,0.0072,0.0036,0.0
-furniture_Nội thất đầy đủ,Nội thất: Nội thất đầy đủ,0.0014,0.0048,0.0031,0.0
+furniture_Nội thất đầy đủ,Nội thất: Nội thất đầy đủ,0.0016,0.0048,0.0032,0.0014
 furniture_Bàn giao thô,Nội thất: Bàn giao thô,0.0,0.004,0.002,0.0
 "apartment_type_Tập thể, cư xá","Loại hình: Tập thể, cư xá",0.0,0.0036,0.0018,0.0

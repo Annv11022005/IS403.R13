@@ -1,6 +1,8 @@
-﻿Hạng,Mô_hình,Đặc_trưng_mô_hình,Train_Months,Test_Months,MAE,RMSE,MAPE,R2
-1,"ARIMAX(1,1,1)",ARIMA kết hợp biến vĩ mô & Google Trends,60,12,0.0214,0.0263,0.0016,0.9822
-2,"SARIMAX(1,1,1)(1,0,1,12)",SARIMA kết hợp biến vĩ mô & Google Trends,60,12,0.0202,0.0285,0.0015,0.9792
-3,"ARIMA(1,1,1)",Đơn biến tự hồi quy tích hợp trung bình trượt,60,12,0.0251,0.0363,0.0019,0.9662
-4,"SARIMA(1,1,1)(1,0,1,12)",ARIMA có thành phần mùa vụ chu kỳ 12 tháng,60,12,0.0308,0.0416,0.0024,0.9555
-5,"LSTM (Lookback=6, Units=24)",Mạng nơ-ron hồi quy bộ nhớ dài-ngắn đa biến,60,12,0.0981,0.1122,0.0075,0.6765
+﻿Hạng,period,Mô_hình,N,MAE,RMSE,MAPE,R2,Được_chọn_từ_validation
+1,test,"SARIMA(1,1,1)(1,0,1,12)",12,0.0262,0.0359,0.002,0.9668,False
+2,test,"ARIMA(1,1,1)",12,0.026,0.0368,0.002,0.9652,False
+3,test,"SARIMAX(1,1,1)(1,0,1,12)",12,0.031,0.0391,0.0024,0.9607,False
+4,test,"ARIMAX(1,1,1)",12,0.0305,0.04,0.0023,0.959,True
+5,test,"LSTM (Lookback=6, Units=24)",12,0.0332,0.0453,0.0026,0.9473,False
+6,test,Naive (tháng trước),12,0.0533,0.0601,0.0041,0.9071,False
+7,test,Seasonal naive (cùng tháng năm trước),12,0.6367,0.6383,0.0488,-9.4697,False

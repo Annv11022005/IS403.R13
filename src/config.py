@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
-import shutil
 import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -51,40 +50,17 @@ COLOR_COMMERCIAL = "#2563EB"
 COLOR_CHDV = "#F59E0B"
 
 
-def cleanup_temp_data() -> None:
-    # Tự động dọn dẹp các file/thư mục dữ liệu nháp và các thư mục cũ trong src/
-    src_dir = PROJECT_ROOT / "src"
-    obsolete_dirs = [
-        DATA_DIR / "raw",
-        src_dir / "data_collection",
-        src_dir / "preprocessing",
-        src_dir / "dataset1",
-        src_dir / "dataset2",
-    ]
-    for d in obsolete_dirs:
-        if d.exists():
-            shutil.rmtree(d, ignore_errors=True)
-
-    for tmp_name in ["ggtrend_search.csv", "multiTimeline.csv"]:
-        tmp_path = DATA_DIR / tmp_name
-        if tmp_path.exists():
-            tmp_path.unlink()
-
-
 def ensure_phase1_dirs() -> None:
-    cleanup_temp_data()
     PHASE1_TABLES_DIR.mkdir(parents=True, exist_ok=True)
     PHASE1_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def ensure_modeling_dirs() -> None:
-    cleanup_temp_data()
     MODELING_TABLES_DIR.mkdir(parents=True, exist_ok=True)
     MODELING_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def ensure_ts_dirs() -> None:
-    cleanup_temp_data()
     PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
     TS_TABLES_DIR.mkdir(parents=True, exist_ok=True)
     TS_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
@@ -116,6 +92,3 @@ def setup_matplotlib_style() -> None:
     plt.rcParams["grid.linestyle"] = "--"
 
 
-if __name__ == "__main__":
-    cleanup_temp_data()
-    print("Da don dep xong data/raw, ggtrend_search.csv, multiTimeline.csv va cac thu muc cu trong src/ (chi giu lai src/analysis va src/model).")

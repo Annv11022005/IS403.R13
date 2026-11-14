@@ -1,6 +1,6 @@
-﻿Mô_hình,Nhánh_Pipeline,CV_5Fold_R2,Train_R2,Test_MAE,Test_RMSE,Test_MAPE,Test_R2,Cấu_hình_tối_ưu
-XGBoost,preprocessor_tree,0.8699,0.9364,1.2351,1.9232,0.1206,0.8835,"ln(y) | subsample=0.85, reg_lambda=8.0, n_estimators=400, max_depth=6, learning_rate=0.03, colsample_bytree=0.7"
-Random Forest,preprocessor_tree,0.8668,0.942,1.2937,1.9324,0.1288,0.8824,"direct | n_estimators=350, min_samples_split=8, min_samples_leaf=2, max_features=0.6, max_depth=22"
-Decision Tree,preprocessor_tree,0.8309,0.8949,1.4497,2.1879,0.1418,0.8492,"ln(y) | min_samples_split=8, min_samples_leaf=8, max_depth=9"
-Ridge Regression,preprocessor_linear,0.8185,0.8235,1.4762,2.2238,0.1562,0.8442,direct | alpha=5.0
-Linear Regression,preprocessor_linear,0.8185,0.8237,1.4777,2.2258,0.1565,0.8439,direct | Default
+﻿Mô_hình,Nhánh_Pipeline,CV_5Fold_R2,CV_5Fold_RMSE,Cấu_hình_tối_ưu,Được_chọn_từ_CV,Test_MAE,Test_RMSE,Test_MAPE,Test_R2
+XGBoost,preprocessor_tree,0.864,2.0811,"ln(y) | subsample=0.85, reg_lambda=8.0, n_estimators=400, max_depth=6, learning_rate=0.03, colsample_bytree=0.7",True,1.2351,1.9231,0.1206,0.8835
+Random Forest,preprocessor_tree,0.8634,2.0858,"ln(y) | n_estimators=200, min_samples_split=8, min_samples_leaf=2, max_features=0.8, max_depth=None",False,,,,
+Decision Tree,preprocessor_tree,0.8261,2.3535,"ln(y) | min_samples_split=8, min_samples_leaf=8, max_depth=9",False,,,,
+Ridge Regression,preprocessor_linear,0.8205,2.3912,direct | alpha=5.0,False,,,,
+Linear Regression,preprocessor_linear,0.8202,2.3926,direct | Default,False,,,,

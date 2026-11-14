@@ -8,6 +8,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import pandas as pd
 
+from src.data_validation import load_validated_data
+
 from src.analysis.ols_econometrics import run_ols_pipeline
 from src.analysis.ts_stationarity_eda import (
     compute_ts_descriptive_stats,
@@ -63,14 +65,14 @@ def build_modeling_report(ols_res: dict[str, object], ml_res: dict[str, object])
         ].to_string(index=False),
         "",
         "------------------------------------------------------------------------------------------",
-        "3. [MỤC D.11 & RQ10] BẢNG SO SÁNH HIỆU NĂNG CÁC MÔ HÌNH MACHINE LEARNING TRÊN TẬP TEST",
+        "3. [MỤC D.11 & RQ10] BẢNG SO SÁNH HIỆU NĂNG CÁC MÔ HÌNH MACHINE LEARNING THEO CV; CHỈ MÔ HÌNH ĐƯỢC CHỌN ĐÁNH GIÁ TRÊN TEST",
         "------------------------------------------------------------------------------------------",
         res_df[
-            ["Mô_hình", "Nhánh_Pipeline", "CV_5Fold_R2", "Train_R2", "Test_MAE", "Test_RMSE", "Test_MAPE", "Test_R2"]
+            ["Mô_hình", "Nhánh_Pipeline", "CV_5Fold_R2", "CV_5Fold_RMSE", "Được_chọn_từ_CV", "Test_MAE", "Test_RMSE", "Test_MAPE", "Test_R2"]
         ].to_string(index=False),
         "",
         "------------------------------------------------------------------------------------------",
-        "4. [TRẢ LỜI RQ7] TOP 10 YẾU TỐ QUAN TRỌNG NHẤT TRONG DỰ BÁO GIÁ THUÊ CĂN HỘ",
+        "4. [TRẢ LỜI RQ7] TOP 10 ĐẶC TRƯNG QUAN TRỌNG TRONG MÔ HÌNH CÂY",
         "------------------------------------------------------------------------------------------",
         imp_df.head(10)[
             ["Biến", "Mô_tả", "Importance_RF", "Importance_XGB", "Importance_Tree", "Permutation_Importance"]
@@ -79,13 +81,14 @@ def build_modeling_report(ols_res: dict[str, object], ml_res: dict[str, object])
         "------------------------------------------------------------------------------------------",
         "5. KẾT LUẬN CHÍNH CHO BÁO CÁO (MỤC D.11, E.1, E.3 - DATASET 1):",
         "------------------------------------------------------------------------------------------",
-        f"  - Mô hình dự báo tốt nhất trên Dataset 1 là `{best_row['Mô_hình']}` với kết quả trên tập Test:",
+        f"  - Mô hình được chọn theo CV trên Dataset 1 là `{best_row['Mô_hình']}` với kết quả trên tập Test:",
         f"      + MAE  = {best_row['Test_MAE']:.4f} triệu VNĐ/tháng",
         f"      + RMSE = {best_row['Test_RMSE']:.4f} triệu VNĐ/tháng",
-        f"      + MAPE = {best_row['Test_MAPE']:.4f} (thang thập phân 0-1)",
-        f"      + R²   = {best_row['Test_R2']:.4f} (thang thập phân 0-1)",
-        "  - Các mô hình Ensemble dựa trên cây (Random Forest, XGBoost) vượt trội hơn mô hình tuyến tính",
-        "    nhờ nắm bắt được tương tác phi tuyến giữa Vị trí (Dự án/Phường) x Quy mô diện tích x Phân khúc.",
+        f"      + MAPE = {best_row['Test_MAPE']:.4f} (tỷ lệ thập phân; có thể lớn hơn 1)",
+        f"      + R²   = {best_row['Test_R2']:.4f} (không có đơn vị; có thể âm)",
+        "  - Mô hình và cấu hình được chọn theo RMSE 5-fold CV trên tập train; test chỉ đánh giá mô hình được chọn.",
+        "  - CV dùng lại để chọn siêu tham số nên chỉ số CV có thể lạc quan.",
+        "  - Tập test đã từng dùng chọn mô hình ở phiên bản trước; cần dữ liệu mới để kiểm định độc lập hơn.",
         "",
         "DANH SÁCH FILE KẾT QUẢ ĐÃ XUẤT:",
         f"  - Thư mục bảng CSV : {MODELING_TABLES_DIR.relative_to(PROJECT_ROOT)} (5 bảng chuẩn)",
@@ -96,52 +99,19 @@ def build_modeling_report(ols_res: dict[str, object], ml_res: dict[str, object])
     return "\n".join(lines)
 
 
-def build_unified_rq10_table(comp_ts_df: pd.DataFrame) -> pd.DataFrame:
-    # Tổng hợp bảng so sánh toàn bộ 10 mô hình (5 ML + 5 Time Series) cùng đơn vị chuẩn
-    ml_csv = MODELING_TABLES_DIR / "d11_ml_model_comparison.csv"
-    rows = []
-    if ml_csv.exists():
-        ml_df = pd.read_csv(ml_csv)
-        for _, r in ml_df.iterrows():
-            mape_val = r["Test_MAPE"] if "Test_MAPE" in r else float(r["Test_MAPE_%"]) / 100.0
-            rows.append({
-                "Nhóm_mô_hình": "Dataset 1 - Machine Learning (Cấp căn hộ)",
-                "Mô_hình": r["Mô_hình"],
-                "MAE": round(float(r["Test_MAE"]), 4),
-                "RMSE": round(float(r["Test_RMSE"]), 4),
-                "MAPE": round(float(mape_val), 4),
-                "R2": round(float(r["Test_R2"]), 4),
-            })
-
-    for _, r in comp_ts_df.iterrows():
-        rows.append({
-            "Nhóm_mô_hình": "Dataset 2 - Chuỗi thời gian (Toàn thị trường)",
-            "Mô_hình": r["Mô_hình"],
-            "MAE": round(float(r["MAE"]), 4),
-            "RMSE": round(float(r["RMSE"]), 4),
-            "MAPE": round(float(r["MAPE"]), 4),
-            "R2": round(float(r["R2"]), 4),
-        })
-
-    unified_df = pd.DataFrame(rows)
-    unified_df.to_csv(TS_TABLES_DIR / "rq10_all_10_models_summary.csv", index=False, encoding="utf-8-sig")
-    return unified_df
-
-
 def main() -> None:
-    # Huấn luyện và đánh giá toàn bộ 10 mô hình dự báo (5 ML trên Dataset 1 & 5 Time Series trên Dataset 2)
+    # Phân tích riêng dữ liệu căn hộ và dữ liệu chuỗi thời gian
+    df1, df2 = load_validated_data()
     ensure_modeling_dirs()
     ensure_ts_dirs()
     setup_matplotlib_style()
 
-    df1 = pd.read_csv(DATASET1_CSV, encoding="utf-8-sig")
     ols_res = run_ols_pipeline(df1, MODELING_TABLES_DIR)
     ml_res = run_ml_pipeline(df1, MODELING_TABLES_DIR, MODELING_FIGURES_DIR)
     modeling_report = build_modeling_report(ols_res, ml_res)
     MODELING_REPORT_TXT.write_text(modeling_report, encoding="utf-8")
     print(modeling_report)
 
-    df2 = pd.read_csv(DATASET2_CSV)
     desc_df = compute_ts_descriptive_stats(df2, TS_TABLES_DIR)
     adf_df = run_adf_stationarity_suite(df2, TS_TABLES_DIR)
     corr_df, regime_df = run_macro_correlations_and_regimes(df2, TS_TABLES_DIR)
@@ -151,7 +121,6 @@ def main() -> None:
     comp_df = ts_res["comparison_df"]
     pred_df = ts_res["predictions_df"]
     future_df = ts_res["future_df"]
-    unified_rq10_df = build_unified_rq10_table(comp_df)
 
     ts_lines = [
         "=" * 88,
@@ -159,7 +128,8 @@ def main() -> None:
         "=" * 88,
         f"- Tổng số quan sát: {len(df2)} tháng (Train: 60 tháng 2019-2023 | Test: 12 tháng 2024)",
         "- Quy ước đơn vị đồng nhất: Sai số tuyệt đối (MAE, RMSE) tính bằng triệu VNĐ/tháng;",
-        "  tất cả các chỉ số tỷ lệ (MAPE, R², Feature Importance, Eta², CV) tính trên thang thập phân [0, 1].",
+        "  MAPE là tỷ lệ thập phân (0,12 tương đương 12%); MAPE có thể lớn hơn 1.",
+        "  R² không có đơn vị và có thể âm; RMSE là sai số tính bằng triệu VNĐ/tháng.",
         "",
         "1. THỐNG KÊ MÔ TẢ CHUỖI THỜI GIAN (ts1_descriptive_stats.csv)",
         "-" * 88,
@@ -177,13 +147,21 @@ def main() -> None:
         "-" * 88,
         corr_df.to_string(index=False),
         "",
-        "5. SO SÁNH 5 MÔ HÌNH DỰ BÁO CHUỖI THỜI GIAN TRÊN TẬP TEST 2024 - TRẢ LỜI RQ10 (ts5_model_comparison_rq10.csv)",
+        "5. SO SÁNH MÔ HÌNH DỰ BÁO CHUỖI THỜI GIAN TRÊN TẬP TEST 2024 - TRẢ LỜI RQ10 (ts5_model_comparison_rq10.csv)",
         "-" * 88,
+        "Đánh giá cuốn chiếu một bước; chọn mô hình theo RMSE validation 2023, test là 2024.",
+        "Ngoại sinh dùng dữ liệu tháng trước, giả định đã công bố; xem ts10_fit_warnings.csv.",
+        "Mô hình có lần không hội tụ trên validation không được chọn để dự báo.",
+        ts_res["rolling_metrics_df"].to_string(index=False),
+        "Mô hình được chọn: " + ts_res["selected_model"],
         comp_df.to_string(index=False),
         "",
-        "6. BẢNG TỔNG HỢP ĐỒNG NHẤT CẢ 10 MÔ HÌNH (5 ML + 5 TIME SERIES) - TRẢ LỜI RQ10 (rq10_all_10_models_summary.csv)",
+        "6. PHẠM VI SO SÁNH KẾT QUẢ",
         "-" * 88,
-        unified_rq10_df.to_string(index=False),
+        "Dataset 1 dự báo giá từng căn hộ; Dataset 2 dự báo chuỗi giá trung bình theo tháng.",
+        "Đơn vị MAE/RMSE giống nhau nhưng không dùng để xếp hạng mô hình giữa hai bài toán.",
+        "Xem kết quả căn hộ trong outputs/dataset1_modeling/; kết quả chuỗi thời gian ở mục 5.",
+        "Nguồn gốc dữ liệu chưa được xác minh; xem data/README.md.",
         "",
         "7. ĐỐI CHIẾU GIÁ THUÊ THỰC TẾ VÀ DỰ BÁO TỪNG THÁNG NĂM 2024 (ts6_test_2024_monthly_predictions.csv)",
         "-" * 88,
@@ -191,6 +169,8 @@ def main() -> None:
         "",
         "8. DỰ BÁO XU HƯỚNG GIÁ THUÊ 12 THÁNG NĂM 2025 (ts7_future_forecast_2025.csv)",
         "-" * 88,
+        "Dự báo bằng mô hình được chọn trên validation, dùng toàn bộ dữ liệu lịch sử.",
+        "Nếu mô hình dùng ngoại sinh, giả định biến giữ nguyên giá trị tháng cuối; chưa ước lượng khoảng dự báo.",
         future_df.to_string(index=False),
         "",
         "9. DANH SÁCH 5 BIỂU ĐỒ CHUẨN IN ẤN (300 DPI) ĐÃ XUẤT",

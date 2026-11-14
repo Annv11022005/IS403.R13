@@ -36,40 +36,41 @@ Intercept (Hệ số chặn)         Giá cơ sở khi các biến bằng 0     
              is_quan_7     Khu vực: Quận 7 (so với Q9/TĐ cũ)      -1.9756     0.2608  -7.575 < 0.0001 5.02             Có ý nghĩa (Giảm giá (-))
 
 ------------------------------------------------------------------------------------------
-3. [MỤC D.11 & RQ10] BẢNG SO SÁNH HIỆU NĂNG CÁC MÔ HÌNH MACHINE LEARNING TRÊN TẬP TEST
+3. [MỤC D.11 & RQ10] BẢNG SO SÁNH HIỆU NĂNG CÁC MÔ HÌNH MACHINE LEARNING THEO CV; CHỈ MÔ HÌNH ĐƯỢC CHỌN ĐÁNH GIÁ TRÊN TEST
 ------------------------------------------------------------------------------------------
-          Mô_hình      Nhánh_Pipeline  CV_5Fold_R2  Train_R2  Test_MAE  Test_RMSE  Test_MAPE  Test_R2
-          XGBoost   preprocessor_tree       0.8699    0.9364    1.2351     1.9232     0.1206   0.8835
-    Random Forest   preprocessor_tree       0.8668    0.9420    1.2937     1.9324     0.1288   0.8824
-    Decision Tree   preprocessor_tree       0.8309    0.8949    1.4497     2.1879     0.1418   0.8492
- Ridge Regression preprocessor_linear       0.8185    0.8235    1.4762     2.2238     0.1562   0.8442
-Linear Regression preprocessor_linear       0.8185    0.8237    1.4777     2.2258     0.1565   0.8439
+          Mô_hình      Nhánh_Pipeline  CV_5Fold_R2  CV_5Fold_RMSE  Được_chọn_từ_CV  Test_MAE  Test_RMSE  Test_MAPE  Test_R2
+          XGBoost   preprocessor_tree       0.8640         2.0811             True    1.2351     1.9231     0.1206   0.8835
+    Random Forest   preprocessor_tree       0.8634         2.0858            False       NaN        NaN        NaN      NaN
+    Decision Tree   preprocessor_tree       0.8261         2.3535            False       NaN        NaN        NaN      NaN
+ Ridge Regression preprocessor_linear       0.8205         2.3912            False       NaN        NaN        NaN      NaN
+Linear Regression preprocessor_linear       0.8202         2.3926            False       NaN        NaN        NaN      NaN
 
 ------------------------------------------------------------------------------------------
-4. [TRẢ LỜI RQ7] TOP 10 YẾU TỐ QUAN TRỌNG NHẤT TRONG DỰ BÁO GIÁ THUÊ CĂN HỘ
+4. [TRẢ LỜI RQ7] TOP 10 ĐẶC TRƯNG QUAN TRỌNG TRONG MÔ HÌNH CÂY
 ------------------------------------------------------------------------------------------
                        Biến                                    Mô_tả  Importance_RF  Importance_XGB  Importance_Tree  Permutation_Importance
-                    area_m2                    Diện tích căn hộ (m²)         0.4535          0.1693           0.3114                  0.6071
-             te_project_pm2 Đặc trưng Dự án/Tòa nhà (Target Encoded)         0.2647          0.0640           0.1644                  0.3059
-                  bathrooms                    Số phòng vệ sinh (WC)         0.0566          0.2239           0.1402                  0.0050
-                   bedrooms                             Số phòng ngủ         0.0392          0.1524           0.0958                  0.0175
-                te_ward_pm2        Vị trí Phường/Xã (Target Encoded)         0.1005          0.0221           0.0613                  0.0226
-                   has_pool                          Tiện ích Hồ bơi         0.0098          0.0569           0.0334                  0.0073
-      distance_to_center_km                  Khoảng cách đến Q1 (km)         0.0385          0.0160           0.0273                  0.0166
-      is_commercial_project            Phân khúc Chung cư thương mại         0.0021          0.0509           0.0265                  0.0008
-                    has_gym                       Tiện ích Phòng Gym         0.0097          0.0306           0.0201                  0.0059
-apartment_type_Nhà ở xã hội                  Loại hình: Nhà ở xã hội         0.0001          0.0347           0.0174                  0.0000
+                    area_m2                    Diện tích căn hộ (m²)         0.5497          0.1693           0.3595                  0.6078
+                  bathrooms                    Số phòng vệ sinh (WC)         0.0535          0.2239           0.1387                  0.0059
+             te_project_pm2 Đặc trưng Dự án/Tòa nhà (Target Encoded)         0.2106          0.0640           0.1373                  0.2698
+                   bedrooms                             Số phòng ngủ         0.0515          0.1524           0.1020                  0.0118
+                te_ward_pm2        Vị trí Phường/Xã (Target Encoded)         0.0559          0.0221           0.0390                  0.0266
+                   has_pool                          Tiện ích Hồ bơi         0.0074          0.0569           0.0321                  0.0085
+      distance_to_center_km                  Khoảng cách đến Q1 (km)         0.0384          0.0160           0.0272                  0.0382
+      is_commercial_project            Phân khúc Chung cư thương mại         0.0023          0.0509           0.0266                  0.0036
+                    has_gym                       Tiện ích Phòng Gym         0.0071          0.0306           0.0188                  0.0061
+apartment_type_Nhà ở xã hội                  Loại hình: Nhà ở xã hội         0.0004          0.0347           0.0176                  0.0002
 
 ------------------------------------------------------------------------------------------
 5. KẾT LUẬN CHÍNH CHO BÁO CÁO (MỤC D.11, E.1, E.3 - DATASET 1):
 ------------------------------------------------------------------------------------------
-  - Mô hình dự báo tốt nhất trên Dataset 1 là `XGBoost` với kết quả trên tập Test:
+  - Mô hình được chọn theo CV trên Dataset 1 là `XGBoost` với kết quả trên tập Test:
       + MAE  = 1.2351 triệu VNĐ/tháng
-      + RMSE = 1.9232 triệu VNĐ/tháng
-      + MAPE = 0.1206 (thang thập phân 0-1)
-      + R²   = 0.8835 (thang thập phân 0-1)
-  - Các mô hình Ensemble dựa trên cây (Random Forest, XGBoost) vượt trội hơn mô hình tuyến tính
-    nhờ nắm bắt được tương tác phi tuyến giữa Vị trí (Dự án/Phường) x Quy mô diện tích x Phân khúc.
+      + RMSE = 1.9231 triệu VNĐ/tháng
+      + MAPE = 0.1206 (tỷ lệ thập phân; có thể lớn hơn 1)
+      + R²   = 0.8835 (không có đơn vị; có thể âm)
+  - Mô hình và cấu hình được chọn theo RMSE 5-fold CV trên tập train; test chỉ đánh giá mô hình được chọn.
+  - CV dùng lại để chọn siêu tham số nên chỉ số CV có thể lạc quan.
+  - Tập test đã từng dùng chọn mô hình ở phiên bản trước; cần dữ liệu mới để kiểm định độc lập hơn.
 
 DANH SÁCH FILE KẾT QUẢ ĐÃ XUẤT:
   - Thư mục bảng CSV : outputs\dataset1_modeling\tables (5 bảng chuẩn)

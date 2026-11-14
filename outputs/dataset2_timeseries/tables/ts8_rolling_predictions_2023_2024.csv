@@ -1,0 +1,169 @@
+﻿month,period,model,actual,prediction
+2023-01,validation,Naive (tháng trước),11.99,11.97
+2023-01,validation,Seasonal naive (cùng tháng năm trước),11.99,10.63
+2023-01,validation,"ARIMA(1,1,1)",11.99,11.971988331570058
+2023-01,validation,"ARIMAX(1,1,1)",11.99,11.997252693611648
+2023-01,validation,"SARIMA(1,1,1)(1,0,1,12)",11.99,11.966242807741123
+2023-01,validation,"SARIMAX(1,1,1)(1,0,1,12)",11.99,11.922077495745514
+2023-01,validation,"LSTM (Lookback=6, Units=24)",11.99,11.9581
+2023-02,validation,Naive (tháng trước),12.27,11.99
+2023-02,validation,Seasonal naive (cùng tháng năm trước),12.27,11.12
+2023-02,validation,"ARIMA(1,1,1)",12.27,11.999516091501384
+2023-02,validation,"ARIMAX(1,1,1)",12.27,11.997858809962162
+2023-02,validation,"SARIMA(1,1,1)(1,0,1,12)",12.27,11.806222108615751
+2023-02,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.27,11.805458706915513
+2023-02,validation,"LSTM (Lookback=6, Units=24)",12.27,11.9097
+2023-03,validation,Naive (tháng trước),12.18,12.27
+2023-03,validation,Seasonal naive (cùng tháng năm trước),12.18,11.14
+2023-03,validation,"ARIMA(1,1,1)",12.18,12.397807719314555
+2023-03,validation,"ARIMAX(1,1,1)",12.18,12.336721120401885
+2023-03,validation,"SARIMA(1,1,1)(1,0,1,12)",12.18,12.434700251064301
+2023-03,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.18,12.390065402890684
+2023-03,validation,"LSTM (Lookback=6, Units=24)",12.18,12.4375
+2023-04,validation,Naive (tháng trước),12.22,12.18
+2023-04,validation,Seasonal naive (cùng tháng năm trước),12.22,11.32
+2023-04,validation,"ARIMA(1,1,1)",12.22,12.19276278907589
+2023-04,validation,"ARIMAX(1,1,1)",12.22,12.222464371681822
+2023-04,validation,"SARIMA(1,1,1)(1,0,1,12)",12.22,12.18529815843649
+2023-04,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.22,12.185358145973737
+2023-04,validation,"LSTM (Lookback=6, Units=24)",12.22,12.3194
+2023-05,validation,Naive (tháng trước),12.31,12.22
+2023-05,validation,Seasonal naive (cùng tháng năm trước),12.31,11.58
+2023-05,validation,"ARIMA(1,1,1)",12.31,12.241400309142287
+2023-05,validation,"ARIMAX(1,1,1)",12.31,12.234745546276107
+2023-05,validation,"SARIMA(1,1,1)(1,0,1,12)",12.31,12.240080930261797
+2023-05,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.31,12.263255838721083
+2023-05,validation,"LSTM (Lookback=6, Units=24)",12.31,12.3544
+2023-06,validation,Naive (tháng trước),12.38,12.31
+2023-06,validation,Seasonal naive (cùng tháng năm trước),12.38,11.73
+2023-06,validation,"ARIMA(1,1,1)",12.38,12.35472184744479
+2023-06,validation,"ARIMAX(1,1,1)",12.38,12.361534469543242
+2023-06,validation,"SARIMA(1,1,1)(1,0,1,12)",12.38,12.355428763309982
+2023-06,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.38,12.381025756735337
+2023-06,validation,"LSTM (Lookback=6, Units=24)",12.38,12.3763
+2023-07,validation,Naive (tháng trước),12.48,12.38
+2023-07,validation,Seasonal naive (cùng tháng năm trước),12.48,11.98
+2023-07,validation,"ARIMA(1,1,1)",12.48,12.426923016886384
+2023-07,validation,"ARIMAX(1,1,1)",12.48,12.441079364160979
+2023-07,validation,"SARIMA(1,1,1)(1,0,1,12)",12.48,12.426396346458127
+2023-07,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.48,12.470007632862764
+2023-07,validation,"LSTM (Lookback=6, Units=24)",12.48,12.4593
+2023-08,validation,Naive (tháng trước),12.57,12.48
+2023-08,validation,Seasonal naive (cùng tháng năm trước),12.57,12.04
+2023-08,validation,"ARIMA(1,1,1)",12.57,12.539988436490008
+2023-08,validation,"ARIMAX(1,1,1)",12.57,12.537596440949466
+2023-08,validation,"SARIMA(1,1,1)(1,0,1,12)",12.57,12.548111131570153
+2023-08,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.57,12.52086824546502
+2023-08,validation,"LSTM (Lookback=6, Units=24)",12.57,12.6392
+2023-09,validation,Naive (tháng trước),12.59,12.57
+2023-09,validation,Seasonal naive (cùng tháng năm trước),12.59,12.06
+2023-09,validation,"ARIMA(1,1,1)",12.59,12.631781972864621
+2023-09,validation,"ARIMAX(1,1,1)",12.59,12.692865852983424
+2023-09,validation,"SARIMA(1,1,1)(1,0,1,12)",12.59,12.629355163979552
+2023-09,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.59,12.675053418328877
+2023-09,validation,"LSTM (Lookback=6, Units=24)",12.59,12.6072
+2023-10,validation,Naive (tháng trước),12.6,12.59
+2023-10,validation,Seasonal naive (cùng tháng năm trước),12.6,11.97
+2023-10,validation,"ARIMA(1,1,1)",12.6,12.624354483004657
+2023-10,validation,"ARIMAX(1,1,1)",12.6,12.631884234015642
+2023-10,validation,"SARIMA(1,1,1)(1,0,1,12)",12.6,12.617071014350202
+2023-10,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.6,12.581144056106906
+2023-10,validation,"LSTM (Lookback=6, Units=24)",12.6,12.7229
+2023-11,validation,Naive (tháng trước),12.66,12.6
+2023-11,validation,Seasonal naive (cùng tháng năm trước),12.66,11.95
+2023-11,validation,"ARIMA(1,1,1)",12.66,12.61860536902918
+2023-11,validation,"ARIMAX(1,1,1)",12.66,12.596193116667452
+2023-11,validation,"SARIMA(1,1,1)(1,0,1,12)",12.66,12.61545024844641
+2023-11,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.66,12.60566361449302
+2023-11,validation,"LSTM (Lookback=6, Units=24)",12.66,12.6268
+2023-12,validation,Naive (tháng trước),12.69,12.66
+2023-12,validation,Seasonal naive (cùng tháng năm trước),12.69,11.97
+2023-12,validation,"ARIMA(1,1,1)",12.69,12.691850357947509
+2023-12,validation,"ARIMAX(1,1,1)",12.69,12.685631345784307
+2023-12,validation,"SARIMA(1,1,1)(1,0,1,12)",12.69,12.692513245001038
+2023-12,validation,"SARIMAX(1,1,1)(1,0,1,12)",12.69,12.696539352342617
+2023-12,validation,"LSTM (Lookback=6, Units=24)",12.69,12.7546
+2024-01,test,Naive (tháng trước),12.71,12.69
+2024-01,test,Seasonal naive (cùng tháng năm trước),12.71,11.99
+2024-01,test,"ARIMA(1,1,1)",12.71,12.71560884247727
+2024-01,test,"ARIMAX(1,1,1)",12.71,12.733343971652378
+2024-01,test,"SARIMA(1,1,1)(1,0,1,12)",12.71,12.714880656690218
+2024-01,test,"SARIMAX(1,1,1)(1,0,1,12)",12.71,12.724390647988717
+2024-01,test,"LSTM (Lookback=6, Units=24)",12.71,12.7197
+2024-02,test,Naive (tháng trước),12.81,12.71
+2024-02,test,Seasonal naive (cùng tháng năm trước),12.81,12.27
+2024-02,test,"ARIMA(1,1,1)",12.81,12.728953598049864
+2024-02,test,"ARIMAX(1,1,1)",12.81,12.707239213097042
+2024-02,test,"SARIMA(1,1,1)(1,0,1,12)",12.81,12.735378477335829
+2024-02,test,"SARIMAX(1,1,1)(1,0,1,12)",12.81,12.725024643845895
+2024-02,test,"LSTM (Lookback=6, Units=24)",12.81,12.7038
+2024-03,test,Naive (tháng trước),12.87,12.81
+2024-03,test,Seasonal naive (cùng tháng năm trước),12.87,12.18
+2024-03,test,"ARIMA(1,1,1)",12.87,12.857810379683741
+2024-03,test,"ARIMAX(1,1,1)",12.87,12.858773140250715
+2024-03,test,"SARIMA(1,1,1)(1,0,1,12)",12.87,12.848322791360063
+2024-03,test,"SARIMAX(1,1,1)(1,0,1,12)",12.87,12.843558886745857
+2024-03,test,"LSTM (Lookback=6, Units=24)",12.87,12.9121
+2024-04,test,Naive (tháng trước),12.88,12.87
+2024-04,test,Seasonal naive (cùng tháng năm trước),12.88,12.22
+2024-04,test,"ARIMA(1,1,1)",12.88,12.914533576647345
+2024-04,test,"ARIMAX(1,1,1)",12.88,12.901940536154228
+2024-04,test,"SARIMA(1,1,1)(1,0,1,12)",12.88,12.91548489774997
+2024-04,test,"SARIMAX(1,1,1)(1,0,1,12)",12.88,12.900989615365646
+2024-04,test,"LSTM (Lookback=6, Units=24)",12.88,12.8578
+2024-05,test,Naive (tháng trước),12.97,12.88
+2024-05,test,Seasonal naive (cùng tháng năm trước),12.97,12.31
+2024-05,test,"ARIMA(1,1,1)",12.97,12.903201959400121
+2024-05,test,"ARIMAX(1,1,1)",12.97,12.928626623887313
+2024-05,test,"SARIMA(1,1,1)(1,0,1,12)",12.97,12.903475223706781
+2024-05,test,"SARIMAX(1,1,1)(1,0,1,12)",12.97,12.928270975430296
+2024-05,test,"LSTM (Lookback=6, Units=24)",12.97,12.8788
+2024-06,test,Naive (tháng trước),13.0,12.97
+2024-06,test,Seasonal naive (cùng tháng năm trước),13.0,12.38
+2024-06,test,"ARIMA(1,1,1)",13.0,13.015718882921824
+2024-06,test,"ARIMAX(1,1,1)",13.0,13.006303010025677
+2024-06,test,"SARIMA(1,1,1)(1,0,1,12)",13.0,13.017353236064865
+2024-06,test,"SARIMAX(1,1,1)(1,0,1,12)",13.0,13.00604254724747
+2024-06,test,"LSTM (Lookback=6, Units=24)",13.0,13.0335
+2024-07,test,Naive (tháng trước),13.08,13.0
+2024-07,test,Seasonal naive (cùng tháng năm trước),13.08,12.48
+2024-07,test,"ARIMA(1,1,1)",13.08,13.031793593979241
+2024-07,test,"ARIMAX(1,1,1)",13.08,13.036630660997396
+2024-07,test,"SARIMA(1,1,1)(1,0,1,12)",13.08,13.032516091147501
+2024-07,test,"SARIMAX(1,1,1)(1,0,1,12)",13.08,13.025282063102702
+2024-07,test,"LSTM (Lookback=6, Units=24)",13.08,13.0995
+2024-08,test,Naive (tháng trước),13.16,13.08
+2024-08,test,Seasonal naive (cùng tháng năm trước),13.16,12.57
+2024-08,test,"ARIMA(1,1,1)",13.16,13.125534738590137
+2024-08,test,"ARIMAX(1,1,1)",13.16,13.123234567871025
+2024-08,test,"SARIMA(1,1,1)(1,0,1,12)",13.16,13.126973567246539
+2024-08,test,"SARIMAX(1,1,1)(1,0,1,12)",13.16,13.134511590816398
+2024-08,test,"LSTM (Lookback=6, Units=24)",13.16,13.1453
+2024-09,test,Naive (tháng trước),13.21,13.16
+2024-09,test,Seasonal naive (cùng tháng năm trước),13.21,12.59
+2024-09,test,"ARIMA(1,1,1)",13.21,13.211681167262807
+2024-09,test,"ARIMAX(1,1,1)",13.21,13.169595440397096
+2024-09,test,"SARIMA(1,1,1)(1,0,1,12)",13.21,13.209091125672598
+2024-09,test,"SARIMAX(1,1,1)(1,0,1,12)",13.21,13.153626117515792
+2024-09,test,"LSTM (Lookback=6, Units=24)",13.21,13.1959
+2024-10,test,Naive (tháng trước),13.26,13.21
+2024-10,test,Seasonal naive (cùng tháng năm trước),13.26,12.6
+2024-10,test,"ARIMA(1,1,1)",13.26,13.25247621664741
+2024-10,test,"ARIMAX(1,1,1)",13.26,13.248299376498707
+2024-10,test,"SARIMA(1,1,1)(1,0,1,12)",13.26,13.249495064438472
+2024-10,test,"SARIMAX(1,1,1)(1,0,1,12)",13.26,13.265359968552785
+2024-10,test,"LSTM (Lookback=6, Units=24)",13.26,13.2687
+2024-11,test,Naive (tháng trước),13.3,13.26
+2024-11,test,Seasonal naive (cùng tháng năm trước),13.3,12.66
+2024-11,test,"ARIMA(1,1,1)",13.3,13.298462598019498
+2024-11,test,"ARIMAX(1,1,1)",13.3,13.326400443977215
+2024-11,test,"SARIMA(1,1,1)(1,0,1,12)",13.3,13.29896336784069
+2024-11,test,"SARIMAX(1,1,1)(1,0,1,12)",13.3,13.333640721502992
+2024-11,test,"LSTM (Lookback=6, Units=24)",13.3,13.3158
+2024-12,test,Naive (tháng trước),13.33,13.3
+2024-12,test,Seasonal naive (cùng tháng năm trước),13.33,12.69
+2024-12,test,"ARIMA(1,1,1)",13.33,13.332738754062865
+2024-12,test,"ARIMAX(1,1,1)",13.33,13.330362764484567
+2024-12,test,"SARIMA(1,1,1)(1,0,1,12)",13.33,13.330745550252074
+2024-12,test,"SARIMAX(1,1,1)(1,0,1,12)",13.33,13.327990734415046
+2024-12,test,"LSTM (Lookback=6, Units=24)",13.33,13.3505
